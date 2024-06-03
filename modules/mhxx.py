@@ -170,16 +170,8 @@ class MonstersXX:
 
 if __name__ == "__main__":
     check_connection()
-    m1 = get_xx_data(0)
-    m2 = get_xx_data(1)
-    m3 = get_xx_data(2)
-    m4 = get_xx_data(3)
-    m5 = get_xx_data(4)
-    m6 = get_xx_data(5)
-
-    print(m1)
-    print(m2)
-    print(m3)
-    print(m4)
-    print(m5)
-    print(m6)
+    for i in range(0, 7):
+        data = get_xx_data(i)
+        monster_names = {**MonstersXX.large_monsters, **MonstersXX.small_monsters}
+        if data[2]:
+            print([monster_names.get(data[0]), *data[1:]])

@@ -28,7 +28,7 @@ def get_4u_4g_data(is_4u: Match[str] | None, slot: int):
 
 
 @dataclass
-class Monsters4U:
+class Monsters4U4G:
     large_monsters = {
         1: "Rathian",
         2: "Rathalos",
@@ -162,16 +162,8 @@ class Monsters4U:
 if __name__ == "__main__":
     is_4u = True
     check_connection()
-    m1 = get_4u_4g_data(is_4u, 0)
-    m2 = get_4u_4g_data(is_4u, 1)
-    m3 = get_4u_4g_data(is_4u, 2)
-    m4 = get_4u_4g_data(is_4u, 3)
-    m5 = get_4u_4g_data(is_4u, 4)
-    m6 = get_4u_4g_data(is_4u, 5)
-
-    print(m1)
-    print(m2)
-    print(m3)
-    print(m4)
-    print(m5)
-    print(m6)
+    for i in range(0, 7):
+        data = get_4u_4g_data(is_4u, i)
+        monster_names = {**Monsters4U4G.large_monsters, **Monsters4U4G.small_monsters}
+        if data[2]:
+            print([monster_names.get(data[0]), *data[1:]])

@@ -1,15 +1,14 @@
 import re
 import sys
 import time
-import signal
 import cursor
 from typing import Any
-from modules.utils import TextColor, rgba_int, clear_screen, check_connection, header, current_game
-from modules.mh4u_mh4g import get_4u_4g_data, Monsters4U
-from modules.mhxx import get_xx_data, MonstersXX
-from modules.config import ConfigOverlay, ConfigLayout, ConfigColors
+from ahk import AHK, Position
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QColorConstants
+from modules.mhxx import get_xx_data, MonstersXX
+from modules.mh4u_mh4g import get_4u_4g_data, Monsters4U4G
+from modules.config import ConfigOverlay, ConfigLayout, ConfigColors
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -17,7 +16,15 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QSizePolicy,
 )
-from ahk import AHK, Position
+from modules.utils import (
+    TextColor,
+    prevent_keyboard_exit_error,
+    rgba_int,
+    clear_screen,
+    check_connection,
+    header,
+    current_game
+)
 
 
 class Overlay(QWidget):
@@ -34,6 +41,7 @@ class Overlay(QWidget):
         self.orientation = ConfigLayout.orientation
         self.x = ConfigLayout.x
         self.y = ConfigLayout.y
+        self.fix_offset = dict(x=ConfigLayout.fix_x, y=ConfigLayout.fix_y)
         self.hotkey = ConfigOverlay.hotkey
         self.hp_update_time = round(ConfigOverlay.hp_update_time * 1000)
         self.initialize_ui()
@@ -100,12 +108,14 @@ class Overlay(QWidget):
 
         lm_layout = QVBoxLayout()
         lm_layout.setContentsMargins(0, 0, 0, 0)
+        lm_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         sm_layout = QVBoxLayout()
         sm_layout.setContentsMargins(0, 0, 0, 0)
+        sm_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         layout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addLayout(lm_layout)
-        layout.setAlignment(Qt.AlignmentFlag.AlignRight)
         layout.addLayout(sm_layout)
 
         self.update_position(ahk, target_window_title)
@@ -127,14 +137,18 @@ class Overlay(QWidget):
 
     def toggle_borderless_screen(self, ahk, target_window_title) -> Any:
         try:
+            print(self.is_borderless)
             win = ahk.find_window(
                 title=target_window_title,
                 title_match_mode="RegEx",
             )
             monitor = self.screen().geometry()
+            target = win.get_position()
             win.set_style("^0xC00000")
             win.set_style("^0x40000")
             if self.is_borderless:
+                win.set_style("+0xC00000")
+                win.set_style("+0x40000")
                 win.move(
                     x=self.initial_window_state.x,
                     y=self.initial_window_state.y,
@@ -142,13 +156,16 @@ class Overlay(QWidget):
                     height=self.initial_window_state.height
                 )
             else:
-                self.initial_window_state = win.get_position()
-                win.move(
-                    x=monitor.x(),
-                    y=monitor.y(),
-                    width=monitor.width(),
-                    height=monitor.height() + 1
-                )
+                if monitor.width() != target.width and monitor.height() != target.height:
+                    self.initial_window_state = target
+                    win.set_style("-0xC00000")
+                    win.set_style("-0x40000")
+                    win.move(
+                        x=monitor.x(),
+                        y=monitor.y(),
+                        width=monitor.width(),
+                        height=monitor.height() + 1
+                    )
         except (Exception,):
             pass
 
@@ -192,8 +209,8 @@ class Overlay(QWidget):
                 if is_4u or is_4g:
                     data = get_4u_4g_data(is_4u, index)
                     if data[2]:
-                        large_monster = dict(name=Monsters4U.large_monsters.get(data[0]), hp=data[1])
-                        small_monster = dict(name=Monsters4U.small_monsters.get(data[0]), hp=data[1])
+                        large_monster = dict(name=Monsters4U4G.large_monsters.get(data[0]), hp=data[1])
+                        small_monster = dict(name=Monsters4U4G.small_monsters.get(data[0]), hp=data[1])
 
                 if is_xx:
                     data = get_xx_data(index)
@@ -238,29 +255,35 @@ class Overlay(QWidget):
             is_main_window = not re.search('(Primary|Secondary)', target_window_title)
             self.resize(self.minimumSizeHint())
             self.is_borderless = monitor.width() == target.width and monitor.height() == target.height - 1
-            fix_position = dict(x=0, y=23)
+            fix_position = dict(x=0 + self.fix_offset["x"], y=23 + self.fix_offset["y"])
+
+            fix_right = self.fix_offset["x"]
 
             if self.is_borderless:
-                fix_position["y"] = -8
-                fix_position["x"] = -9
+                fix_position["y"] = -8 + self.fix_offset["y"]
+                fix_position["x"] = -9 + self.fix_offset["x"]
+                fix_right = abs(fix_position["x"] + self.fix_offset["x"])
+
+            fix_bottom = -self.fix_offset["y"]
 
             if is_main_window:
-                fix_position["y"] = 55
+                fix_position["y"] = 45 + self.fix_offset["y"]
+                fix_bottom = 30 - self.fix_offset["y"]
                 if self.is_borderless:
-                    fix_position["y"] = 24
+                    fix_position["y"] = 14 + self.fix_offset["y"]
+                    fix_bottom = 22 - self.fix_offset["y"]
 
             offset_x = (
                 target.width -
                 self.geometry().width() -
-                (fix_position["x"] * 2 if self.is_borderless else fix_position["x"])
+                fix_position["x"] +
+                fix_right
             ) * self.x / 100
             offset_y = (
                 target.height -
                 self.geometry().height() -
-                (
-                    fix_position["y"] * 2 if self.is_borderless else fix_position["y"] +
-                    (30 if is_main_window else 0)
-                )
+                fix_position["y"] -
+                fix_bottom
             ) * self.y / 100
             self.move(
                 target.x + fix_position["x"] + int(offset_x),
@@ -272,9 +295,7 @@ class Overlay(QWidget):
 
 
 if __name__ == "__main__":
-    def handler(signum, frame):
-        sys.exit()
-    signal.signal(signal.SIGINT, handler)
+    prevent_keyboard_exit_error()
     cursor.hide()
     header()
     app = QApplication(sys.argv)

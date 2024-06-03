@@ -1,9 +1,5 @@
 import subprocess
-import os
-
-
-def absolute_path(path: str = ''):
-    return os.path.abspath(path).replace('\\modules', '')
+from modules.utils import absolute_path
 
 
 def main():

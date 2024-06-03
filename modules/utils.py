@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import time
+import signal
 from art import *
 from enum import StrEnum
 from colorama import Fore
@@ -40,15 +41,20 @@ def read(address: int, size=4, result_type: ResultType = ResultType.INT):
     return value
 
 
-def path(file_path):
-    relative_dir = os.path.dirname(file_path)
-    absolute_dir = os.path.dirname(os.path.abspath(file_path))
-    return absolute_dir if file_path.split('/')[0] == '..' else relative_dir
+def absolute_path(path: str = ''):
+    return os.path.abspath(path).replace('\\modules', '')
 
 
 def end():
-    time.sleep(2)
+    time.sleep(8)
     sys.exit()
+
+
+def prevent_keyboard_exit_error():
+    def handler(signum, frame):
+        sys.exit()
+
+    return signal.signal(signal.SIGINT, handler)
 
 
 def header():

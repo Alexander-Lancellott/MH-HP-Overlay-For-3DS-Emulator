@@ -1,5 +1,5 @@
 from cx_Freeze import setup, Executable
-from modules.build import absolute_path
+from modules.utils import absolute_path
 
 build_exe_options = {
     'build_exe': absolute_path('build\\dist'),
