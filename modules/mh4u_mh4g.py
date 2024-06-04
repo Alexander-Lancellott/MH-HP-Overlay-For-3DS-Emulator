@@ -16,13 +16,12 @@ def get_data(p0: int, offset: int):
     ]
 
 
-def get_4u_4g_data(is_4u: Match[str] | None, slot: int):
+def get_4u_4g_data(slot: int):
     pointer0 = read(0xF031FC)
     if pointer0 != 137470816:
         pointer0 = read(0xF12214)
-
-    if is_4u:
-        pointer0 = read(0xF32004)
+        if pointer0 not in (137471952, 137472064):
+            pointer0 = read(0xF32004)
 
     return get_data(pointer0, 0x18 + (0x4 * slot))
 
@@ -124,7 +123,7 @@ class Monsters4U4G:
         52: "Aptonoth",
         53: "Popo",
         54: "Slagtoth",
-        55: "Slagtoth (Red)",
+        55: "Slagtoth",
         56: "Jaggi",
         57: "Jaggia",
         58: "Velociprey",
@@ -137,33 +136,32 @@ class Monsters4U4G:
         65: "Felyne",
         66: "Melynx",
         67: "Altaroth",
-        68: "Bnahabra (Blue wings)",
-        69: "Bnahabra (Yellow wings)",
-        70: "Bnahabra (Green wings)",
-        71: "Bnahabra (Red wings)",
+        68: "Bnahabra",
+        69: "Bnahabra",
+        70: "Bnahabra",
+        71: "Bnahabra",
         72: "Zamite",
-        73: "Konchu (Yellow)",
-        74: "Konchu (Green)",
-        75: "Konchu (Blue)",
-        76: "Konchu (Red)",
-        81: "Rock (Large, light grey w/ green spots)",
-        84: "Rock (Large, dark grey w/ dirty spots)",
-        85: "Rock (Large, almost black)",
-        86: "Rock (Large, icy)",
-        87: "Rock (Large, icy ver 2)",
-        104: "Rock (Large, brown)",
+        73: "Konchu",
+        74: "Konchu",
+        75: "Konchu",
+        76: "Konchu",
+        81: "Rock",
+        84: "Rock",
+        85: "Rock",
+        86: "Rock",
+        87: "Rock",
+        104: "Rock",
         106: "Cephalos",
         109: "Hermitaur",
         118: "Apceros",
-        123: "Rock (Large, light grey no spots)"
+        123: "Rock"
     }
 
 
 if __name__ == "__main__":
-    is_4u = True
     check_connection()
     for i in range(0, 7):
-        data = get_4u_4g_data(is_4u, i)
+        data = get_4u_4g_data(i)
         monster_names = {**Monsters4U4G.large_monsters, **Monsters4U4G.small_monsters}
         if data[2]:
             print([monster_names.get(data[0]), *data[1:]])

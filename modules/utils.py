@@ -77,6 +77,10 @@ class TextColor:
 
 
 def current_game(win_title):
+    if re.search('3U', win_title):
+        return 'MH3U'
+    if re.search('3 \\(tri-\\) G', win_title):
+        return 'MH3G'
     if re.search('4 ULTIMATE', win_title):
         return 'MH4U'
     elif re.search('4G', win_title):

@@ -7,6 +7,7 @@ from ahk import AHK, Position
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QColorConstants
 from modules.mhxx import get_xx_data, MonstersXX
+from modules.mh3u_mh3g import get_3u_3g_data, Monsters3U3G
 from modules.mh4u_mh4g import get_4u_4g_data, Monsters4U4G
 from modules.config import ConfigOverlay, ConfigLayout, ConfigColors
 from PySide6.QtWidgets import (
@@ -35,7 +36,7 @@ class Overlay(QWidget):
         self.is_open_window = False
         self.initial_window_state: Position = Position(0, 0, 600, 500)
         self.win_title = ''
-        self.timeout = int(20 * 60) + 1  # 20 minutes
+        self.timeout = (20 * 60) + 1  # 20 minutes
         self.counter = self.timeout
         self.timeout_start = time.time()
         self.orientation = ConfigLayout.orientation
@@ -47,7 +48,7 @@ class Overlay(QWidget):
         self.initialize_ui()
 
     def initialize_ui(self):
-        target_window_title = "MONSTER HUNTER (4 ULTIMATE|4G|XX)"
+        target_window_title = '(MONSTER HUNTER |MH)(3U|3 \\(tri-\\) G|4 ULTIMATE|4G|XX)'
 
         if ConfigOverlay.emu_window == 'primary':
             target_window_title += ' | Primary Window'
@@ -179,7 +180,7 @@ class Overlay(QWidget):
             self.counter -= 1
             m, s = divmod(self.counter, 60)
             text = (
-                f'{TextColor.red('No game is running.')} '
+                f'{TextColor.red('No game running.')} '
                 f'Waiting {TextColor.yellow(f'{m:02d}:{s:02d}')}, then it will close.'
             )
             print(f'\r{text}',  end="",  flush=True)
@@ -194,7 +195,7 @@ class Overlay(QWidget):
             self.counter = self.timeout
             self.timeout_start = time.time()
             game = current_game(self.win_title)
-            text = f'{TextColor.green(f'{game} is running.')}'
+            text = f'{TextColor.green(f'{game} running.')}'
             print(f'\r{text}', end="", flush=True)
             check_connection()
 
@@ -203,11 +204,20 @@ class Overlay(QWidget):
             for index, label in enumerate(labels):
                 large_monster = dict(name='', hp=0)
                 small_monster = dict(name='', hp=0)
+                is_3u = current_game(self.win_title) == 'MH3U'
+                is_3g = current_game(self.win_title) == 'MH3G'
                 is_4u = current_game(self.win_title) == 'MH4U'
                 is_4g = current_game(self.win_title) == 'MH4G'
                 is_xx = current_game(self.win_title) == 'MHXX'
+
+                if is_3u or is_3g:
+                    data = get_3u_3g_data(index)
+                    if data[2]:
+                        large_monster = dict(name=Monsters3U3G.large_monsters.get(data[0]), hp=data[1])
+                        small_monster = dict(name=Monsters3U3G.small_monsters.get(data[0]), hp=data[1])
+
                 if is_4u or is_4g:
-                    data = get_4u_4g_data(is_4u, index)
+                    data = get_4u_4g_data(index)
                     if data[2]:
                         large_monster = dict(name=Monsters4U4G.large_monsters.get(data[0]), hp=data[1])
                         small_monster = dict(name=Monsters4U4G.small_monsters.get(data[0]), hp=data[1])

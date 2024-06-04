@@ -20,7 +20,7 @@ def get_data(p0: int, offset: int):
 
 def get_xx_data(slot: int):
     pointer0 = read(0xD2CAA0)
-    if pointer0 != 137066272 and pointer0 != 137074272:
+    if pointer0 not in (137066272, 137074272):
         pointer0 = read(0xD30AA0)
         if pointer0 != 137074864:
             pointer0 = read(0xD3A8E0)
