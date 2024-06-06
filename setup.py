@@ -7,9 +7,9 @@ setup(
     version="1.0.0",
     packages=find_packages(),
     install_requires=[
+        "cx_Freeze",
         "cursor==1.3.5",
         "PySide6==6.7.1",
-        "cx_Freeze==7.1.0",
         "colorama==0.4.6",
         "art==6.2",
         "ahk[binary]==1.7.4",
