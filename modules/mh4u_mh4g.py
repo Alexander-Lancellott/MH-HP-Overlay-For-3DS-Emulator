@@ -1,4 +1,3 @@
-from re import Match
 from dataclasses import dataclass
 from modules.utils import read, check_connection
 
@@ -7,20 +6,16 @@ def get_data(p0: int, offset: int):
     p1 = p0 + offset
     p2 = read(p1) + 0xE28
     p3 = read(p2) + 0x3E8
-    is_visible = read(p3 - 0x228 + 10, 3) != 786188
-    return [
-        read(p3 - 0x228, 1),
-        read(p3, 2),
-        is_visible,
-        p3
-    ]
+    is_visible = read(p3 - 0x21E, 3) != 0xBFF0C
+
+    return [read(p3 - 0x228, 1), read(p3, 2), is_visible, p3]
 
 
 def get_4u_4g_data(slot: int):
     pointer0 = read(0xF031FC)
-    if pointer0 != 137470816:
+    if pointer0 != 0x831A360:
         pointer0 = read(0xF12214)
-        if pointer0 not in (137471952, 137472064):
+        if pointer0 not in (0x831A7D0, 0x831A840):
             pointer0 = read(0xF32004)
 
     return get_data(pointer0, 0x18 + (0x4 * slot))
@@ -154,7 +149,7 @@ class Monsters4U4G:
         106: "Cephalos",
         109: "Hermitaur",
         118: "Apceros",
-        123: "Rock"
+        123: "Rock",
     }
 
 
