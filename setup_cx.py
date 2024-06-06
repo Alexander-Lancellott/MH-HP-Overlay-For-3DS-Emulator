@@ -8,7 +8,7 @@ build_exe_options = {
         absolute_path("LICENSE"),
         absolute_path("README.md"),
     ],
-    "zip_exclude_packages": ["ahk", "PySide6"],
+    "zip_exclude_packages": ["ahk"],
     "zip_include_packages": "*",
     "optimize": 2,
 }
