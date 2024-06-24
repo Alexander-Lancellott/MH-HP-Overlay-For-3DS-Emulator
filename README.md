@@ -76,12 +76,9 @@ Keep in mind that, by default, the target window is the emulator's `main` window
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/native-fullscreen.webp"
-        target="_blank">
-        <img alt="Full-screen"
-          src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/native-fullscreen.webp"
-          style="min-width: 397.5px;" />
-      </a>
+      <img alt="Full-screen"
+        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/native-fullscreen.webp"
+        style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -95,12 +92,9 @@ Keep in mind that, by default, the target window is the emulator's `main` window
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/borderless.webp"
-        target="_blank">
-        <img alt="Borderless"
-          src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/borderless.webp"
-          style="min-width: 397.5px;" />
-      </a>
+      <img alt="Borderless"
+        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/borderless.webp"
+        style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -328,12 +322,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
   <tr align="center">
     <td>
-        <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/main.webp" 
-        target="_blank">
-          <img alt="main"
-          src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/main.webp"
-          style="min-width: 397.5px;" />
-        </a>
+      <img alt="main"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/main.webp"
+      style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -345,12 +336,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
   <tr>
     <td>
-        <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/primary.webp"
-        target="_blank">
-          <img alt="primary"
-          src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/primary.webp"
-          style="min-width: 397.5px;" />
-        </a>
+      <img alt="primary"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/primary.webp"
+      style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -362,12 +350,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/secondary.webp"
-      target="_blank">
-        <img alt="secondary"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/secondary.webp"
-        style="min-width: 397.5px;" />
-      </a>
+      <img alt="secondary"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/secondary.webp"
+      style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -418,18 +403,12 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
   <tr>
     <td>
-        <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/labels.webp"
-        target="_blank">
-          <img alt="labels"
-          src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/labels.webp" />
-        </a>
+      <img alt="labels"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/labels.webp" />
     </td>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/align.webp"
-      target="_blank">
-        <img alt="align"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/align.webp" />
-      </a>
+      <img alt="align"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/align.webp" />
     </td>
   </tr>
 </table>
@@ -493,25 +472,16 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/labels.webp"
-      target="_blank">
-        <img alt="labels"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/labels.webp" />
-      </a>
+      <img alt="labels"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/labels.webp" />
     </td>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/left.webp"
-      target="_blank">
-        <img alt="left"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/left.webp" />
-      </a>
+      <img alt="left"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/left.webp" />
     </td>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/right.webp"
-      target="_blank">
-        <img alt="right"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/right.webp" />
-      </a>
+      <img alt="right"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/right.webp" />
     </td>
   </tr>
 </table>
@@ -569,12 +539,9 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/x-100.webp" 
-      target="_blank">
-        <img alt="x-100"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/x-100.webp"
-        style="min-width: 397.5px;" />
-      </a>
+      <img alt="x-100"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/x-100.webp"
+      style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -588,12 +555,9 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/x-0.webp"
-      target="_blank">
-        <img alt="x-0"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/x-0.webp"
-        style="min-width: 397.5px;" />
-      </a>
+      <img alt="x-0"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/x-0.webp"
+      style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -607,12 +571,9 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   </tr>
   <tr>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/y-100.webp"
-      target="_blank">
-        <img alt="y-100"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/y-100.webp"
-        style="min-width: 397.5px;" />
-      </a>
+      <img alt="y-100"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/y-100.webp"
+      style="min-width: 397.5px;" />
     </td>
   </tr>
 </table>
@@ -672,18 +633,12 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   </tr>
   <tr>
     <td>
-        <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/fix-y-0.webp"
-        target="_blank">
-          <img alt="fix-y-0"
-          src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/fix-y-0.webp" />
-        </a>
+      <img alt="fix-y-0"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/fix-y-0.webp" />
     </td>
     <td>
-      <a href="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/fix-y-10.webp"
-      target="_blank">
-        <img alt="fix-y-10"
-        src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/fix-y-10.webp" />
-      </a>
+      <img alt="fix-y-10"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/fix-y-10.webp" />
     </td>
   </tr>
 </table>
@@ -726,7 +681,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
     <td>aquamarine</td>
     <td>string</td>
     <td>
-        Must be a <a href="https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg">CSS SVG Color</a>
+      Must be a <a href="https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg">CSS SVG Color</a>
     </td>
   </tr>
   <tr align="center">
@@ -734,7 +689,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
     <td>darkslategray</td>
     <td>string</td>
     <td>
-        Must be a <a href="https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg">CSS SVG Color</a>
+      Must be a <a href="https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg">CSS SVG Color</a>
     </td>
   </tr>
   <tr align="center">
