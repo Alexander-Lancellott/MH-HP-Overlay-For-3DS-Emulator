@@ -17,8 +17,7 @@ setup(
     name="MH-HP-Overlay",
     version="1.0.0",
     author="Alexander-Lancellott",
-    author_email="alejandrov.lancellotti@gmail.com",
-    description="Simple overlay application",
+    description="A simple HP overlay application",
     options={"build_exe": build_exe_options},
     executables=[
         Executable(

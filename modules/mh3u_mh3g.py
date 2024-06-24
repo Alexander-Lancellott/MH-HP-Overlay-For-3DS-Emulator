@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from modules.utils import read, check_connection
+from modules.utils import read, check_connection, max_monsters
 
 
 def get_data(p0: int, offset: int):
@@ -13,11 +13,12 @@ def get_data(p0: int, offset: int):
 
 
 def get_3u_3g_data(slot: int):
-    pointer0 = read(0x1666AAF8)
+    is_eur = read(0x0708AD88, 8) == 0x40000000B1D00
+    offset = 0x9AC if is_eur else 0x56C
+    pointer0 = read(0xBEB670)
     if read(0xBEB670) != 0x8209168:
-        pointer0 = read(0x1666AEF8)
-
-    return get_data(pointer0, 0x224 + (0x220 * slot))
+        pointer0 = read(0xBE17D8)
+    return get_data(pointer0, offset + (0x220 * slot))
 
 
 @dataclass
@@ -116,8 +117,10 @@ class Monsters3U3G:
 
 if __name__ == "__main__":
     check_connection()
-    for i in range(0, 7):
+    pointers = []
+    for i in range(0, max_monsters):
         data = get_3u_3g_data(i)
         monster_names = {**Monsters3U3G.large_monsters, **Monsters3U3G.small_monsters}
-        if data[2]:
+        if data[2] and data[3] not in pointers:
             print([monster_names.get(data[0]), *data[1:]])
+        pointers.append(data[3])

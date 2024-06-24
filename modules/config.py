@@ -202,14 +202,14 @@ class ConfigOverlay:
     show_small_monsters = set_option(
         "show_small_monsters", Config.Overlay, "getboolean", "true"
     )
-    emu_window = set_option("emulator_window", Config.Overlay, "get", "main")
-    if emu_window not in ("main", "primary", "secondary"):
+    target_window = set_option("target_window", Config.Overlay, "get", "main")
+    if target_window not in ("main", "primary", "secondary"):
         error = "It can only be main, primary or secondary"
-        print_error("emulator_window", error)
+        print_error("target_window", error)
     hotkey = set_option("hotkey", Config.Overlay, "get", "^!f")
     if not re.search(hotkey_regex, hotkey):
         error = (
-            "Invalid Hotkey Symbol. "
+            "Invalid hotkey. "
             "Check this: https://www.autohotkey.com/docs/v1/Hotkeys.htm#Symbols "
             "The symbols *, ~, $ and UP are not allowed."
         )
@@ -220,7 +220,8 @@ class ConfigOverlay:
         "font_family", Config.Overlay, "get", "Consolas, monaco, monospace"
     )
     font_weight = set_option("font_weight", Config.Overlay, "get", "bold")
-    font_size = abs(set_option("font_size", Config.Overlay, "getint", "18"))
+    font_size = set_option("font_size", Config.Overlay, "getint", "18")
+    font_size = font_size if font_size >= 1 else 1
 
 
 @dataclass
@@ -230,10 +231,10 @@ class ConfigLayout:
     if orientation not in ("center", "left", "right"):
         error = "It can only be center, left or right"
         print_error("orientation", error)
-    x = abs(set_option("x", Config.Layout, "getint", "100"))
-    x = x if x <= 100 else 100
-    y = abs(set_option("y", Config.Layout, "getint", "0"))
-    y = y if y <= 100 else 100
+    x = set_option("x", Config.Layout, "getint", "100")
+    x = x if 0 <= x <= 100 else 100
+    y = set_option("y", Config.Layout, "getint", "0")
+    y = y if 0 <= y <= 100 else 100
     fix_x = set_option("fix_x", Config.Layout, "getint", "0")
     fix_y = set_option("fix_y", Config.Layout, "getint", "0")
 
@@ -256,13 +257,9 @@ class ConfigColors:
             "Check this: https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg"
         )
         print_error("background_color", error)
-    text_transparency = abs(
-        set_option("text_transparency", Config.Colors, "getint", "100")
-    )
-    text_transparency = text_transparency if text_transparency <= 100 else 100
-    background_transparency = abs(
-        set_option("background_transparency", Config.Colors, "getint", "60")
-    )
+    text_transparency = set_option("text_transparency", Config.Colors, "getint", "100")
+    text_transparency = text_transparency if 1 <= text_transparency <= 100 else 100
+    background_transparency = set_option("background_transparency", Config.Colors, "getint", "60")
     background_transparency = (
-        background_transparency if background_transparency <= 100 else 100
+        background_transparency if 1 <= background_transparency <= 100 else 60
     )

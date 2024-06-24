@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from modules.utils import read, check_connection
+from modules.utils import read, check_connection, max_monsters
 
 
 def get_data(p0: int, offset: int):
@@ -155,8 +155,10 @@ class Monsters4U4G:
 
 if __name__ == "__main__":
     check_connection()
-    for i in range(0, 7):
+    pointers = []
+    for i in range(0, max_monsters):
         data = get_4u_4g_data(i)
         monster_names = {**Monsters4U4G.large_monsters, **Monsters4U4G.small_monsters}
-        if data[2]:
+        if data[2] and data[3] not in pointers:
             print([monster_names.get(data[0]), *data[1:]])
+        pointers.append(data[3])

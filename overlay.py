@@ -18,6 +18,7 @@ from modules.utils import (
     check_connection,
     header,
     current_game,
+    max_monsters
 )
 
 
@@ -27,8 +28,6 @@ def validate_not_responding(win_array, expression):
         if re.search(expression, window.get_title()):
             result = True
     return result
-
-
 
 
 class Overlay(QWidget):
@@ -54,10 +53,9 @@ class Overlay(QWidget):
         target_window_title = (
             "(MONSTER HUNTER |MH)(3 ULTIMATE|3U|3 \\(tri-\\) G|4 ULTIMATE|4U|4G|XX)"
         )
-
-        if ConfigOverlay.emu_window == "primary":
+        if ConfigOverlay.target_window == "primary":
             target_window_title += " \\| Primary Window"
-        if ConfigOverlay.emu_window == "secondary":
+        if ConfigOverlay.target_window == "secondary":
             target_window_title += " \\| Secondary Window"
 
         target_window_title += "$"
@@ -91,27 +89,25 @@ class Overlay(QWidget):
         )
 
         labels = []
-        for i in range(0, 7):
+        for i in range(0, max_monsters):
             label = QLabel()
             label.setStyleSheet(
                 f"""
                 color: {color};
                 background-color: {background_color};
-                padding: 5px 10px;
+                padding: 5px {15 if self.orientation == 'center' else 10}px;
                 """
             )
-            if ConfigLayout.align:
-                label.setSizePolicy(
-                    QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-                )
-                if self.orientation == "right":
-                    label.setAlignment(Qt.AlignmentFlag.AlignRight)
-                elif self.orientation == "left":
-                    label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-                else:
-                    label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setSizePolicy(
+                QSizePolicy.Policy.Expanding if ConfigLayout.align else QSizePolicy.Policy.Fixed,
+                QSizePolicy.Policy.Fixed
+            )
+            if self.orientation == "right":
+                label.setAlignment(Qt.AlignmentFlag.AlignRight)
+            elif self.orientation == "left":
+                label.setAlignment(Qt.AlignmentFlag.AlignLeft)
             else:
-                label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+                label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             labels.append(label)
 
         lm_layout = QVBoxLayout()
@@ -208,6 +204,7 @@ class Overlay(QWidget):
             print(f"\r{text}", end="", flush=True)
 
     def update_show(self, lm_layout, sm_layout, labels):
+        pointers = []
         for index, label in enumerate(labels):
             label_layout = QVBoxLayout()
             label_layout.setContentsMargins(0, 0, 0, 0)
@@ -215,53 +212,42 @@ class Overlay(QWidget):
                 if self.is_open_window:
                     large_monster = dict(name="", hp=0)
                     small_monster = dict(name="", hp=0)
-                    is_3u = current_game(self.win_title) == "MH3U"
-                    is_3g = current_game(self.win_title) == "MH3G"
-                    is_4u = current_game(self.win_title) == "MH4U"
-                    is_4g = current_game(self.win_title) == "MH4G"
-                    is_xx = current_game(self.win_title) == "MHXX"
+                    is_3u3g = current_game(self.win_title) in ("MH3U", "MH3G")
+                    is_4u4g = current_game(self.win_title) in ("MH4U", "MH4G")
 
-                    if is_3u or is_3g:
-                        data = get_3u_3g_data(index)
-                        if data[2]:
-                            large_monster = dict(
-                                name=Monsters3U3G.large_monsters.get(data[0]),
-                                hp=data[1],
-                            )
-                            small_monster = dict(
-                                name=Monsters3U3G.small_monsters.get(data[0]),
-                                hp=data[1],
-                            )
+                    data = (
+                        get_3u_3g_data(index)
+                        if is_3u3g else get_4u_4g_data(index)
+                        if is_4u4g else get_xx_data(index)
+                    )
+                    large_monster_name = (
+                        Monsters3U3G.large_monsters.get(data[0])
+                        if is_3u3g else Monsters4U4G.large_monsters.get(data[0])
+                        if is_4u4g else MonstersXX.large_monsters.get(data[0])
+                    )
+                    small_monster_name = (
+                        Monsters3U3G.small_monsters.get(data[0])
+                        if is_3u3g else Monsters4U4G.small_monsters.get(data[0])
+                        if is_4u4g else MonstersXX.small_monsters.get(data[0])
+                    )
 
-                    if is_4u or is_4g:
-                        data = get_4u_4g_data(index)
-                        if data[2]:
-                            large_monster = dict(
-                                name=Monsters4U4G.large_monsters.get(data[0]),
-                                hp=data[1],
-                            )
-                            small_monster = dict(
-                                name=Monsters4U4G.small_monsters.get(data[0]),
-                                hp=data[1],
-                            )
+                    if data[2] and data[3] not in pointers:
+                        large_monster = dict(
+                            name=large_monster_name,
+                            hp=data[1],
+                        )
+                        small_monster = dict(
+                            name=small_monster_name,
+                            hp=data[1],
+                        )
+                    pointers.append(data[3])
 
-                    if is_xx:
-                        data = get_xx_data(index)
-                        if data[2]:
-                            large_monster = dict(
-                                name=MonstersXX.large_monsters.get(data[0]), hp=data[1]
-                            )
-                            small_monster = dict(
-                                name=MonstersXX.small_monsters.get(data[0]), hp=data[1]
-                            )
-
-                    if not ConfigLayout.align:
-                        if self.orientation == "right":
-                            label_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
-                        elif self.orientation == "left":
-                            label_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-                        else:
-                            label_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    if self.orientation == "right":
+                        label_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+                    elif self.orientation == "left":
+                        label_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+                    else:
+                        label_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
                     l_name = large_monster["name"]
                     l_hp = large_monster["hp"]
@@ -303,7 +289,7 @@ class Overlay(QWidget):
             target = win.get_position()
             monitor = self.screen().geometry()
             self.win_title = win.get_title()
-            is_main_window = ConfigOverlay.emu_window == "main"
+            is_main_window = ConfigOverlay.target_window == "main"
             self.resize(self.minimumSizeHint())
             self.is_borderless = (
                 monitor.width() == target.width
@@ -321,10 +307,10 @@ class Overlay(QWidget):
             fix_bottom = -self.fix_offset["y"]
 
             if is_main_window:
-                fix_position["y"] = 57 + self.fix_offset["y"]
+                fix_position["y"] = 47 + self.fix_offset["y"]
                 fix_bottom = 30 - self.fix_offset["y"]
                 if self.is_borderless:
-                    fix_position["y"] = 26 + self.fix_offset["y"]
+                    fix_position["y"] = 16 + self.fix_offset["y"]
                     fix_bottom = 22 - self.fix_offset["y"]
 
             offset_x = (

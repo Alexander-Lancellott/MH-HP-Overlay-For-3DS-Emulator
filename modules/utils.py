@@ -14,6 +14,7 @@ red = Fore.RED
 reset = Fore.RESET
 
 c = Citra()
+max_monsters = 7
 
 
 class ResultType(StrEnum):
@@ -96,5 +97,5 @@ def check_connection():
             test = c.read_memory(0x100000, 4)
             return type(test) is bytes and test != b"\x04\xf0\x1f\xe5"
         except (Exception,):
-            print(TextColor.red("\nFailed to connect to Citra RPC Server"))
+            print(TextColor.red("\nCouldn't connect to 3DS emulator server"))
             end()
