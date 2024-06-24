@@ -20,14 +20,12 @@ I think I've managed to make the overlay compatible with all existing versions o
 - MH3G (JPN) - 0004000000048100 - v0(default)
 - MH3U (EUR) - 00040000000B1D00 - v0(default)
 - MH3U (USA) - 00040000000AE400 - v0(default)
-<br />
-
+<br>&nbsp;
 - MH4G (JPN) - 000400000011D700 - v0(default), v1.1 & v1.2
 - MH4G (Taiwan) - 0004000000141A00 - v0(default) & v1.1
 - MH4U (EUR) - 0004000000126100 - v0(default) & v1.1
 - MH4U (USA) - 0004000000126300 - v0(default) & v1.1
-<br />
-
+<br>&nbsp;
 - MHXX (JPN) - 0004000000197100 - v0(default), v1.1, v1.2, v1.3 & v1.4
 - MHXX (Taiwan) - 00040000001B8100 - v0(default), v1.1, v1.2, v1.3 & v1.4
 
@@ -229,11 +227,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
 Within the `config.ini` file, you can customize the type, weight, and size of the font used in the overlay by editing the following options:
 
 - `font_family`: Allows you to change the font type. You should use fonts that are compatible with the web (**Web Safe Fonts**). You can find a list of these fonts [here](https://www.cssfontstack.com/).
-<br />
-
+<br>&nbsp;
 - `font_weight`: Allows you to adjust the font weight. Common values include `normal` for regular weight and `bold` for bold weight.
-<br />
-
+<br>&nbsp;
 - `font_size`: Allows you to specify the font size in pixels.
 
 Make sure to use **Web Safe Fonts** and to close and reopen the overlay after making changes in the `config.ini` file for these adjustments to take effect.
@@ -286,11 +282,9 @@ Make sure to use **Web Safe Fonts** and to close and reopen the overlay after ma
 Within the `config.ini` file, the `target_window` option allows the overlay to target one of the three available windows in the **Citra** emulator or its variants:
 
 - `main`: This window includes the toolbar at the top and the bottom bar displaying FPS. It's the default configuration in the **Citra** emulator.
-<br />
-
+<br>&nbsp;
 - `primary`: This window is separate from the toolbar and FPS bottom bar, presenting a clean window. It's the recommended option for use with the overlay's borderless screen system.
-<br />
-
+<br>&nbsp;
 - `secondary`: This window is similar to the primary window but by default shows the secondary screen of the 3DS console. It'll only be visible if the **Screen Layout** option is set to **Separate Windows** within the emulator.
 
 To view the primary window in the **Citra** emulator, follow these steps:
@@ -445,11 +439,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
 The `orientation` option within the `config.ini` file allows you to define the position of content within the `labels`. You can configure this option with one of the following values:
 
 - `center`: Centers the content within the `labels`.
-<br />
-
+<br>&nbsp;
 - `left`: Aligns the content to the left within the `labels`.
-<br />
-
+<br>&nbsp;
 - `right`: Aligns the content to the right within the `labels`.
 
 Remember to close and reopen the overlay after making changes in the `config.ini` file for these adjustments to take effect.
@@ -529,8 +521,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
 The `x` and `y` options within the `config.ini` file allow you to adjust the position of the overlay using Cartesian coordinates. These values are relative and percentage-based to the size of the target window, with a minimum range of `0` and maximum of `100` for each coordinate.
 
 - `x`: Controls the horizontal position of the overlay.
-<br />
-
+<br>&nbsp;
 - `y`: Controls the vertical position of the overlay.
 
 Adjust these values to move the overlay to the desired position on the screen.
@@ -572,7 +563,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   <tr align="center">
     <td>
       <strong>x = 100</strong>
-      <br/>
+      <br>
       <strong>y = 0</strong>
     </td>
   </tr>
@@ -591,7 +582,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   <tr align="center">
     <td>
       <strong>x = 0<strong>
-      <br/>
+      <br>
       <strong>y = 0<strong>
     </td>
   </tr>
@@ -610,7 +601,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   <tr align="center">
     <td>
       <strong>x = 0<strong>
-      <br/>
+      <br>
       <strong>y = 100<strong>
     </td>
   </tr>
@@ -702,14 +693,11 @@ Remember to close and reopen the overlay after making changes in the `config.ini
 Within the `config.ini` file, you can customize the color of text and background in the overlay `labels`, as well as their opacity. The available options are as follows:
 
 - `text_color`: Specifies the color of the text within the `labels`. You can use any of the color names from **CSS SVG Colors**. You can view a list of these colors [here](https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg).
-<br />
-
+<br>&nbsp;
 - `background_color`: Defines the background color of the `labels` in the overlay. Similar to text_color, you can use any valid color name from **CSS SVG Colors**.
-<br />
-
+<br>&nbsp;
 - `text_transparency`: Controls the opacity of the text within the `labels`.
-<br />
-
+<br>&nbsp;
 - `background_transparency`: Controls the opacity of the background of the `labels`.
 
 Adjust these values according to your preferences to customize the visual appearance of the overlay.
