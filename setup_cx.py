@@ -4,6 +4,8 @@ from modules.utils import absolute_path
 build_exe_options = {
     "build_exe": absolute_path("build\\dist"),
     "include_files": [
+        absolute_path(".venv\\Scripts\\AutoHotkey.exe"),
+        absolute_path(".venv\\Scripts\\AutoHotkeyV2.exe"),
         absolute_path("config.ini"),
         absolute_path("LICENSE"),
         absolute_path("README.md"),
@@ -15,7 +17,7 @@ build_exe_options = {
 
 setup(
     name="MH-HP-Overlay",
-    version="1.0.0",
+    version="1.0.1",
     author="Alexander-Lancellott",
     description="A simple HP overlay application",
     options={"build_exe": build_exe_options},

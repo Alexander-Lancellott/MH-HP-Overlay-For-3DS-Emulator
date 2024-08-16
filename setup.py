@@ -4,7 +4,7 @@ setup(
     name="MH-HP-Overlay-For-3DS-Emulator",
     author="Alexander-Lancellott",
     author_email="alejandrov.lancellotti@gmail.com",
-    version="1.0.0",
+    version="1.0.1",
     packages=find_packages(),
     install_requires=[
         "cx_Freeze",
