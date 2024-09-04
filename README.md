@@ -107,6 +107,84 @@ Inside the root folder, there is a file called `config.ini`, which stores the va
 
 Below, you will find sub-sections dedicated to documenting each of the available options in the `config.ini`.
 
+### Show Initial HP
+
+The `show_initial_hp` option in the `config.ini` file allows you to show or hide each monster's maximum HP. Its default value is set to `true`.
+
+Remember to close and reopen the overlay after making changes to the `config.ini` file for these adjustments to take effect.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      show_initial_hp
+    </td>
+    <td>
+      true
+    </td>
+    <td>
+      boolean
+    </td>
+    <td>
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+</table>
+
+### Show HP Percentage
+
+The `show_hp_percentage` option in the `config.ini` file allows you to show or hide HP as a percentage for each monster. Its default value is set to `true`.
+
+Remember to close and reopen the overlay after making changes to the `config.ini` file for these adjustments to take effect.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      show_hp_percentage
+    </td>
+    <td>
+      true
+    </td>
+    <td>
+      boolean
+    </td>
+    <td>
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+</table>
+
 ### Show Small Monsters
 
 The `show_small_monsters` option in the `config.ini` file determines whether the overlay will display all monsters, including small ones. By default, this option is set to `true`.
@@ -185,9 +263,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
 
 ### HP update time
 
-The `hp_update_time` option in the `config.ini` file allows you to adjust the refresh time of the HP value in seconds. By default, this value is set to `1` second, which is the minimum possible value.
+The `hp_update_time` option in the `config.ini` file allows you to adjust the HP value update interval in seconds. The default value is `0.5`, which is equivalent to 500 milliseconds, and the minimum value is `0.1`.
 
-You can modify this value to increase the time interval for refreshing the HP value. Higher values will increase the update interval, potentially reducing the frequency of HP value updates.
+You can modify this value to increase or decrease the time interval for updating the HP value.
 
 Remember to close and reopen the overlay after making changes to the `config.ini` file for these adjustments to take effect.
 
@@ -210,9 +288,9 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
   <tr align="center">
     <td>hp_update_time</td>
-    <td>1</td>
+    <td>0.5</td>
     <td>float</td>
-    <td>Must be greater than or equal to 1</td>
+    <td>Must be greater than or equal to 0.1</td>
   </tr>
 </table>
 
@@ -582,7 +660,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
 
 The `fix_x` and `fix_y` options within the `config.ini` file allow you to adjust the position of the overlay in specific situations where modifying the `x` and `y` coordinates may not be sufficient.
 
-These options should only be modified in particular circumstances or when adjusting the `x` and `y` coordinates doesn't adequately resolve the overlay's location. For example, if you're using the `main` window target in emulators like **Lime3DS** or **Citra-Enhanced**, you may notice that the toolbar is thicker or taller than in Citra. In such cases, you should set the `fix_y` option to `10` to compensate for this difference.
+These options should only be modified in particular circumstances or when adjusting the `x` and `y` coordinates doesn't adequately resolve the overlay's location. For example, if you're using the `main` window target in emulators like **Lime3DS** or **Citra-Enhanced**, you may notice that the toolbar is thicker or taller than in Citra. In such cases, you should set the `fix_y` option to `11` to compensate for this difference.
 
 Remember to close and reopen the overlay after making changes in the `config.ini` file for these adjustments to take effect.
 
@@ -628,7 +706,7 @@ Remember to close and reopen the overlay after making changes in the `config.ini
       <strong>fix_y = 0</strong>
     </td>
     <td>
-      <strong>fix_y = 10</strong>
+      <strong>fix_y = 11</strong>
     </td>
   </tr>
   <tr>

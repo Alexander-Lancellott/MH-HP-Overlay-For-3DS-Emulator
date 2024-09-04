@@ -1,15 +1,18 @@
+import math
 import re
 import sys
 import time
 import cursor
 from ahk import AHK, Position
-from PySide6.QtCore import QTimer, Qt
+from ahk_wmutil import wmutil_extension
+from PySide6.QtCore import QTimer, Qt, QThread, Signal
 from PySide6.QtGui import QColorConstants
 from modules.mhxx import get_xx_data, MonstersXX
 from modules.mh3u_mh3g import get_3u_3g_data, Monsters3U3G
 from modules.mh4u_mh4g import get_4u_4g_data, Monsters4U4G
 from modules.config import ConfigOverlay, ConfigLayout, ConfigColors
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QSizePolicy
+
 from modules.utils import (
     TextColor,
     prevent_keyboard_exit_error,
@@ -22,22 +25,40 @@ from modules.utils import (
 )
 
 
-def validate_not_responding(win_array, expression):
-    result = False
-    for window in win_array:
-        if re.search(expression, window.get_title()):
-            result = True
-    return result
+class DataFetcher(QThread):
+    data_fetched = Signal(list)
+
+    def __init__(self, game, show_small_monsters):
+        super().__init__()
+        self.show_small_monsters = show_small_monsters
+        self.is_3u3g = game in ("MH3U", "MH3G")
+        self.is_4u4g = game in ("MH4U", "MH4G")
+
+    def run(self):
+        while True:
+            data = []
+            try:
+                data = (
+                    get_3u_3g_data(self.show_small_monsters)
+                    if self.is_3u3g else get_4u_4g_data(self.show_small_monsters)
+                    if self.is_4u4g else get_xx_data(self.show_small_monsters)
+                )
+            except (Exception,):
+                pass
+            self.data_fetched.emit(data)
+            self.msleep(round(ConfigOverlay.hp_update_time * 1000))
 
 
 class Overlay(QWidget):
     def __init__(self):
         super().__init__()
-        self.is_borderless = False
         self.running = False
+        self.data_fetcher = None
+        self.is_borderless = False
         self.is_open_window = False
-        self.initial_window_state: Position = Position(0, 0, 600, 500)
+        self.initial_window_state: Position = Position(0, 0, 800, 600)
         self.win_title = ""
+        self.game = ""
         self.timeout = (20 * 60) + 1  # 20 minutes
         self.counter = self.timeout
         self.timeout_start = time.time()
@@ -47,12 +68,17 @@ class Overlay(QWidget):
         self.fix_offset = dict(x=ConfigLayout.fix_x, y=ConfigLayout.fix_y)
         self.hotkey = ConfigOverlay.hotkey
         self.hp_update_time = round(ConfigOverlay.hp_update_time * 1000)
+        self.show_initial_hp = ConfigOverlay.show_initial_hp
+        self.show_hp_percentage = ConfigOverlay.show_hp_percentage
+        self.show_small_monsters = ConfigOverlay.show_small_monsters
+        self.is_main_window = ConfigOverlay.target_window == "main"
         self.initialize_ui()
 
     def initialize_ui(self):
         target_window_title = (
             "(MONSTER HUNTER |MH)(3 ULTIMATE|3U|3 \\(tri-\\) G|4 ULTIMATE|4U|4G|XX)"
         )
+        not_responding_title = " \\([\\w\\s]+\\)$"
         if ConfigOverlay.target_window == "primary":
             target_window_title += " \\| Primary Window"
         if ConfigOverlay.target_window == "secondary":
@@ -60,7 +86,7 @@ class Overlay(QWidget):
 
         target_window_title += "$"
 
-        ahk = AHK(version="v2")
+        ahk = AHK(version="v2", extensions=[wmutil_extension])
         self.setWindowTitle("Overlay")
         self.setWindowFlags(
             Qt.WindowType.Tool
@@ -110,6 +136,18 @@ class Overlay(QWidget):
                 label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             labels.append(label)
 
+        label_layouts = []
+        for i in range(0, max_monsters):
+            label_layout = QVBoxLayout()
+            label_layout.setContentsMargins(0, 0, 0, 0)
+            if self.orientation == "right":
+                label_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+            elif self.orientation == "left":
+                label_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+            else:
+                label_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label_layouts.append(label_layout)
+
         lm_layout = QVBoxLayout()
         lm_layout.setContentsMargins(0, 0, 0, 0)
         lm_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -117,38 +155,58 @@ class Overlay(QWidget):
         sm_layout.setContentsMargins(0, 0, 0, 0)
         sm_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+        for index, label_layout in enumerate(label_layouts):
+            if 2 > index:
+                lm_layout.addLayout(label_layout)
+            else:
+                sm_layout.addLayout(label_layout)
+
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addLayout(lm_layout)
         layout.addLayout(sm_layout)
 
-        self.update_position(ahk, target_window_title)
+        self.update_position(ahk, layout, target_window_title, not_responding_title)
 
         ahk.add_hotkey(
-            self.hotkey,
-            callback=lambda: self.toggle_borderless_screen(ahk, target_window_title),
+            f"{self.hotkey} Up",
+            callback=lambda: self.toggle_borderless_screen(ahk, target_window_title, not_responding_title),
         )
         ahk.start_hotkeys()
 
         timer1 = QTimer(self)
-        timer1.timeout.connect(lambda: self.update_position(ahk, target_window_title))
-        timer1.start(1)
+        timer1.timeout.connect(lambda: self.update_position(ahk, layout, target_window_title, not_responding_title))
+        timer1.start(5)
 
         timer2 = QTimer(self)
-        timer2.timeout.connect(lambda: self.update_show(lm_layout, sm_layout, labels))
-        timer2.start(self.hp_update_time)
+        timer2.timeout.connect(lambda: self.wait_init_game(labels, label_layouts))
+        timer2.start(1000)
 
-        timer3 = QTimer(self)
-        timer3.timeout.connect(self.wait_init_game)
-        timer3.start(1000)
+    def start_data_fetcher(self, labels, label_layouts):
+        self.data_fetcher = DataFetcher(self.game, self.show_small_monsters)
+        self.data_fetcher.data_fetched.connect(
+            lambda data: self.update_show(data, labels, label_layouts)
+        )
+        self.data_fetcher.start()
 
-    def toggle_borderless_screen(self, ahk, target_window_title):
-        try:
+    @staticmethod
+    def get_window(ahk, target_window_title, not_responding_title):
+        win = None
+        win_not_responding = ahk.find_window(
+            title=target_window_title + not_responding_title, title_match_mode="RegEx"
+        )
+        if not win_not_responding:
             win = ahk.find_window(title=target_window_title, title_match_mode="RegEx")
-            monitor = self.screen().geometry()
+        return win
+
+    def toggle_borderless_screen(self, ahk, target_window_title, not_responding_title):
+        try:
+            win = self.get_window(ahk, target_window_title, not_responding_title)
+            monitor = win.get_monitor()
             target = win.get_position()
             win.set_style("^0xC00000")
             win.set_style("^0x40000")
+            self.is_borderless = monitor.size[0] <= target.width and monitor.size[1] - 1 <= target.height
             if self.is_borderless:
                 win.set_style("+0xC00000")
                 win.set_style("+0x40000")
@@ -159,27 +217,25 @@ class Overlay(QWidget):
                     height=self.initial_window_state.height,
                 )
             else:
-                if (
-                    monitor.width() != target.width
-                    and monitor.height() != target.height
-                ):
-                    self.initial_window_state = target
-                    win.set_style("-0xC00000")
-                    win.set_style("-0x40000")
-                    win.move(
-                        x=monitor.x(),
-                        y=monitor.y(),
-                        width=monitor.width(),
-                        height=monitor.height() + 1,
-                    )
+                self.initial_window_state = target
+                win.set_style("-0xC00000")
+                win.set_style("-0x40000")
+                win.move(
+                    x=monitor.position[0],
+                    y=monitor.position[1],
+                    width=monitor.size[0],
+                    height=monitor.size[1] + 1,
+                )
         except (Exception,):
             pass
 
-    def wait_init_game(self):
+    def wait_init_game(self, labels, label_layouts):
         if not self.is_open_window:
             if self.running:
                 clear_screen()
                 header()
+            if self.data_fetcher:
+                self.data_fetcher.terminate()
             self.running = False
             self.hide()
             self.counter -= 1
@@ -196,142 +252,93 @@ class Overlay(QWidget):
                 clear_screen()
                 header()
                 check_connection()
+                self.start_data_fetcher(labels, label_layouts)
             self.running = True
             self.counter = self.timeout
             self.timeout_start = time.time()
-            game = current_game(self.win_title)
-            text = TextColor.green(f"{game} running.")
+            text = TextColor.green(f"{self.game} running.")
             print(f"\r{text}", end="", flush=True)
 
-    def update_show(self, lm_layout, sm_layout, labels):
-        pointers = []
-        for index, label in enumerate(labels):
-            label_layout = QVBoxLayout()
-            label_layout.setContentsMargins(0, 0, 0, 0)
-            try:
-                if self.is_open_window:
-                    large_monster = dict(name="", hp=0)
-                    small_monster = dict(name="", hp=0)
-                    is_3u3g = current_game(self.win_title) in ("MH3U", "MH3G")
-                    is_4u4g = current_game(self.win_title) in ("MH4U", "MH4G")
-
-                    data = (
-                        get_3u_3g_data(index)
-                        if is_3u3g else get_4u_4g_data(index)
-                        if is_4u4g else get_xx_data(index)
-                    )
+    def update_show(self, data, labels, label_layouts):
+        if self.is_open_window:
+            for index, label in enumerate(labels):
+                if len(data) > index:
+                    is_3u3g = self.game in ("MH3U", "MH3G")
+                    is_4u4g = self.game in ("MH4U", "MH4G")
+                    label_layout = label_layouts[index]
+                    monster = data[index]
                     large_monster_name = (
-                        Monsters3U3G.large_monsters.get(data[0])
-                        if is_3u3g else Monsters4U4G.large_monsters.get(data[0])
-                        if is_4u4g else MonstersXX.large_monsters.get(data[0])
+                        Monsters3U3G.large_monsters.get(monster[0])
+                        if is_3u3g else Monsters4U4G.large_monsters.get(monster[0])
+                        if is_4u4g else MonstersXX.large_monsters.get(monster[0])
                     )
                     small_monster_name = (
-                        Monsters3U3G.small_monsters.get(data[0])
-                        if is_3u3g else Monsters4U4G.small_monsters.get(data[0])
-                        if is_4u4g else MonstersXX.small_monsters.get(data[0])
+                        Monsters3U3G.small_monsters.get(monster[0])
+                        if is_3u3g else Monsters4U4G.small_monsters.get(monster[0])
+                        if is_4u4g else MonstersXX.small_monsters.get(monster[0])
                     )
-
-                    if data[2] and data[3] not in pointers:
-                        large_monster = dict(
-                            name=large_monster_name,
-                            hp=data[1],
-                        )
-                        small_monster = dict(
-                            name=small_monster_name,
-                            hp=data[1],
-                        )
-                    pointers.append(data[3])
-
-                    if self.orientation == "right":
-                        label_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
-                    elif self.orientation == "left":
-                        label_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-                    else:
-                        label_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-                    l_name = large_monster["name"]
-                    l_hp = large_monster["hp"]
-                    s_name = small_monster["name"]
-                    s_hp = small_monster["hp"]
-
-                    if l_name:
-                        label.setText(f"{l_name}: {l_hp}")
-                        label_layout.addWidget(label)
-                        lm_layout.addLayout(label_layout)
-                    elif not s_name:
-                        label.setParent(None)
-                        label_layout.removeWidget(label)
-
-                    if ConfigOverlay.show_small_monsters:
-                        if s_name and s_hp < 20000:
-                            label.setText(f"{s_name}: {s_hp}")
+                    hp = monster[1]
+                    initial_hp = monster[2]
+                    if initial_hp > 5:
+                        if large_monster_name:
+                            text = f"{large_monster_name}:"
+                            if self.show_hp_percentage:
+                                text += f" {math.ceil((hp / initial_hp) * 100)}% |"
+                            text += f" {hp}"
+                            if self.show_initial_hp:
+                                text += f" | {initial_hp}"
+                            label.setText(text)
                             label_layout.addWidget(label)
-                            sm_layout.addLayout(label_layout)
-                        elif not l_name:
-                            label.setParent(None)
-                            label_layout.removeWidget(label)
-                    self.show()
+                        if self.show_small_monsters:
+                            if small_monster_name and hp < 20000:
+                                text = f"{small_monster_name}:"
+                                if self.show_hp_percentage:
+                                    text += f" {math.ceil((hp / initial_hp) * 100)}% |"
+                                text += f" {hp}"
+                                if self.show_initial_hp:
+                                    text += f" | {initial_hp}"
+                                label.setText(text)
+                                label_layout.addWidget(label)
+                    else:
+                        label.clear()
+                        label.setParent(None)
                 else:
+                    label.clear()
                     label.setParent(None)
-                    label_layout.removeWidget(label)
-            except (Exception,):
-                label.setParent(None)
-                label_layout.removeWidget(label)
+                self.show()
 
-    def update_position(self, ahk, target_window_title):
+    def update_position(self, ahk, layout, target_window_title, not_responding_title):
         try:
-            target_not_responding_window = target_window_title.replace("$", " \\([\\w\\W\\s]+\\)$")
-            win = None
-            if not validate_not_responding(ahk.list_windows(), target_not_responding_window):
-                win = ahk.find_window(
-                    title=target_window_title, title_match_mode="RegEx"
-                )
+            win = self.get_window(ahk, target_window_title, not_responding_title)
             target = win.get_position()
-            monitor = self.screen().geometry()
+            monitor = win.get_monitor()
             self.win_title = win.get_title()
-            is_main_window = ConfigOverlay.target_window == "main"
+            self.game = current_game(self.win_title)
             self.resize(self.minimumSizeHint())
-            self.is_borderless = (
-                monitor.width() == target.width
-                and monitor.height() == target.height - 1
-            )
-            fix_position = dict(x=0 + self.fix_offset["x"], y=23 + self.fix_offset["y"])
+            self.is_borderless = monitor.size[0] <= target.width and monitor.size[1] - 1 <= target.height
 
-            fix_right = self.fix_offset["x"]
+            margin_top = 35
+            margin_bottom = 11
+            margin_left = 11
+            margin_right = 11
 
             if self.is_borderless:
-                fix_position["y"] = -8 + self.fix_offset["y"]
-                fix_position["x"] = -9 + self.fix_offset["x"]
-                fix_right = abs(fix_position["x"] + self.fix_offset["x"])
+                margin_top = 4
+                margin_bottom = 6
+                margin_left = 4
+                margin_right = 4
 
-            fix_bottom = -self.fix_offset["y"]
-
-            if is_main_window:
-                fix_position["y"] = 47 + self.fix_offset["y"]
-                fix_bottom = 30 - self.fix_offset["y"]
+            if self.is_main_window:
+                margin_top = 56
+                margin_bottom = 42
                 if self.is_borderless:
-                    fix_position["y"] = 16 + self.fix_offset["y"]
-                    fix_bottom = 22 - self.fix_offset["y"]
+                    margin_top = 25
+                    margin_bottom = 34
 
-            offset_x = (
-                (target.width - self.geometry().width() - fix_position["x"] + fix_right)
-                * self.x
-                / 100
-            )
-            offset_y = (
-                (
-                    target.height
-                    - self.geometry().height()
-                    - fix_position["y"]
-                    - fix_bottom
-                )
-                * self.y
-                / 100
-            )
-            self.move(
-                target.x + fix_position["x"] + int(offset_x),
-                target.y + fix_position["y"] + int(offset_y),
-            )
+            offset_x = (target.x + (target.width - self.geometry().width()) * self.x / 100) + self.fix_offset["x"]
+            offset_y = (target.y + (target.height - self.geometry().height()) * self.y / 100) + self.fix_offset["y"]
+            layout.setContentsMargins(margin_left, margin_top, margin_right, margin_bottom)
+            self.move(offset_x, offset_y)
             self.is_open_window = True
         except (Exception,):
             self.is_open_window = False

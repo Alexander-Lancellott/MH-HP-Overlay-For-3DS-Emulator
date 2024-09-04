@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass
 from modules.utils import read, check_connection, max_monsters
 
@@ -9,16 +10,32 @@ def get_data(p0: int, offset: int):
     if p2 > 0x965:
         is_visible = read(p2 + 0x149, 3) == 0x3E800
 
-    return [read(p2 - 0x7F5, 2), read(p2, 2), is_visible, p2]
+    return [read(p2 - 0x7F5, 2), read(p2, 2), read(p2 + 0x4, 2), is_visible, p2]
 
 
-def get_3u_3g_data(slot: int):
+def get_3u_3g_data(show_small_monsters: bool):
+    large_monsters = Monsters3U3G.large_monsters
+    small_monsters = Monsters3U3G.small_monsters
+    large_monster_results = []
+    small_monster_results = []
     is_eur = read(0x0708AD88, 8) == 0x40000000B1D00
     offset = 0x9AC if is_eur else 0x56C
     pointer0 = read(0xBEB670)
     if read(0xBEB670) != 0x8209168:
         pointer0 = read(0xBE17D8)
-    return get_data(pointer0, offset + (0x220 * slot))
+
+    for i in range(0, max_monsters):
+        data = get_data(pointer0, offset + (0x220 * i))
+        name = data[0]
+        hp = data[1]
+        initial_hp = data[2]
+        is_visible = data[3]
+        if large_monsters.get(name) and is_visible:
+            large_monster_results.append([name, hp, initial_hp])
+        if small_monsters.get(name) and is_visible and show_small_monsters:
+            small_monster_results.append([name, hp, initial_hp])
+
+    return large_monster_results + small_monster_results
 
 
 @dataclass
@@ -116,11 +133,11 @@ class Monsters3U3G:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     check_connection()
-    pointers = []
-    for i in range(0, max_monsters):
-        data = get_3u_3g_data(i)
-        monster_names = {**Monsters3U3G.large_monsters, **Monsters3U3G.small_monsters}
-        if data[2] and data[3] not in pointers:
-            print([monster_names.get(data[0]), *data[1:]])
-        pointers.append(data[3])
+    monster_names = {**Monsters3U3G.large_monsters, **Monsters3U3G.small_monsters}
+    monsters = get_3u_3g_data(True)
+    for monster in monsters:
+        print([monster_names[monster[0]], *monster[1::]])
+    end_time = time.time()
+    print(end_time - start_time)

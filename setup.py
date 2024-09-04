@@ -7,12 +7,13 @@ setup(
     version="1.0.1",
     packages=find_packages(),
     install_requires=[
-        "cx_Freeze",
-        "cursor==1.3.5",
-        "PySide6==6.7.1",
+        "ahk[binary]==1.8.0",
+        "ahk-wmutil==0.1.0",
         "colorama==0.4.6",
+        "PySide6==6.7.2",
+        "cursor==1.3.5",
+        "cx_Freeze",
         "art==6.2",
-        "ahk[binary]==1.7.4",
     ],
     python_requires=">=3.8",
     classifiers=[

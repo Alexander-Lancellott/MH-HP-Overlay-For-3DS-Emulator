@@ -199,6 +199,12 @@ class Config:
 
 @dataclass
 class ConfigOverlay:
+    show_initial_hp = set_option(
+        "show_initial_hp", Config.Overlay, "getboolean", "true"
+    )
+    show_hp_percentage = set_option(
+        "show_hp_percentage", Config.Overlay, "getboolean", "true"
+    )
     show_small_monsters = set_option(
         "show_small_monsters", Config.Overlay, "getboolean", "true"
     )
@@ -214,8 +220,8 @@ class ConfigOverlay:
             "The symbols *, ~, $ and UP are not allowed."
         )
         print_error("hotkey", error)
-    hp_update_time = set_option("hp_update_time", Config.Overlay, "getfloat", "1")
-    hp_update_time = hp_update_time if hp_update_time >= 1 else 1
+    hp_update_time = set_option("hp_update_time", Config.Overlay, "getfloat", "0.5")
+    hp_update_time = hp_update_time if hp_update_time >= 0.1 else 0.1
     font_family = set_option(
         "font_family", Config.Overlay, "get", "Consolas, monaco, monospace"
     )
