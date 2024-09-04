@@ -10,7 +10,7 @@ build_exe_options = {
         absolute_path("LICENSE"),
         absolute_path("README.md"),
     ],
-    "zip_exclude_packages": ["ahk"],
+    "zip_exclude_packages": ["ahk", "ahk_wmutil"],
     "zip_include_packages": "*",
     "optimize": 2,
 }

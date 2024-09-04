@@ -13,6 +13,8 @@ A simple open-source HP overlay that I've developed for MH3U/3G, MH4U/4G, and MH
 
 Although I've conducted numerous tests, the overlay may still contain some bugs that I haven't detected. If you encounter any issues, I would appreciate it if you could report them by opening an issue and providing any evidence that allows for replication.
 
+If you liked this overlay, I've also created a port ([MHGU-MHXX-HP-Overlay-For-Switch-Emulator](https://github.com/Alexander-Lancellott/MHGU-MHXX-HP-Overlay-For-Switch-Emulator)) of it for MHGU/MHXX that works with Switch emulators like Ryujinx, Y\*\*\* or S\*\*\*.
+
 ## Compatibility
 
 I think I've managed to make the overlay compatible with all existing versions of each game, with or without their updates. Below is a list of the versions where I tested and confirmed that the overlay works correctly:
