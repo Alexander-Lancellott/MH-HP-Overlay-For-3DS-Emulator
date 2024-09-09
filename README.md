@@ -31,6 +31,16 @@ I think I've managed to make the overlay compatible with all existing versions o
 - MHXX (JPN) - 0004000000197100 - v0(default), v1.1, v1.2, v1.3 & v1.4
 - MHXX (Taiwan) - 00040000001B8100 - v0(default), v1.1, v1.2, v1.3 & v1.4
 
+## High DPI Scaling (optional, only if you notice it)
+
+If your monitor has a resolution higher than 1080p, it's likely you're using a DPI scale above 100%. In this case, the initial position of the overlay may not be the same as when using 100% scaling. To mitigate this, you have three options:
+
+- Set your screen scaling to 100%. You can follow this [guide](https://support.microsoft.com/en-us/windows/view-display-settings-in-windows-37f0e05e-98a9-474c-317a-e85422daa8bb).
+
+- If setting your monitor’s scaling to 100% is not ideal for you, then disable automatic DPI scaling for Citra. To do this, right-click on `citra-qt.exe`, select Properties, then go to the Compatibility tab. You'll see a checkbox that says, **"Override high DPI scaling behavior."** A drop-down menu will let you choose one of three options. Select `System` or `System Enhanced`. You can find a helpful guide [here](https://www.majorgeeks.com/content/page/how_to_change_dpi_scaling_settings_in_windows.html).
+
+- If neither of the previous options suits you, use the [Fix X & Fix Y](#fix-x--fix-y) options to adjust the overlay more precisely and correct the slight misalignment.
+
 ## How to use
 
 To use the overlay, simply open the `MH-HP-Overlay.exe` file.
@@ -228,6 +238,92 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
 </table>
 
+### Target window
+
+Within the `config.ini` file, the `target_window` option allows the overlay to target one of the three available windows in the **Citra** emulator or its variants:
+
+- `main`: This window includes the toolbar at the top and the bottom bar displaying FPS. It's the default configuration in the **Citra** emulator.
+<br>&nbsp;
+- `primary`: This window is separate from the toolbar and FPS bottom bar, presenting a clean window. It's the recommended option for use with the overlay's borderless screen system.
+<br>&nbsp;
+- `secondary`: This window is similar to the primary window but by default shows the secondary screen of the 3DS console. It'll only be visible if the **Screen Layout** option is set to **Separate Windows** within the emulator.
+
+To view the primary window in the **Citra** emulator, follow these steps:
+
+1. Go to the emulator's toolbar.
+2. Click on **View**.
+3. Disable the **Single Window Mode** option.
+
+Remember to close and reopen the overlay after making changes to the `config.ini` file for these adjustments to take effect.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>target_window</td>
+    <td>main</td>
+    <td>string</td>
+    <td>Must be main, primary or secondary</td>
+  </tr>
+</table>
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>target_window = main</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      <img alt="main"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/main.webp"
+      style="min-width: 397.5px;" />
+    </td>
+  </tr>
+</table>
+<table>
+  <tr align="center">
+    <td>
+        <strong>target_window = primary<strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img alt="primary"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/primary.webp"
+      style="min-width: 397.5px;" />
+    </td>
+  </tr>
+</table>
+<table>
+  <tr align="center">
+    <td>
+      <strong>target_window = secondary<strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img alt="secondary"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/secondary.webp"
+      style="min-width: 397.5px;" />
+    </td>
+  </tr>
+</table>
+
 ### Hotkey
 
 The `config.ini` file includes the `hotkey` option, which defines the keyboard shortcut used to toggle the borderless screen system on/off. By default, this shortcut is `Ctrl + Alt + F`. You can replace it with another shortcut if the default one is inconvenient for you.
@@ -351,23 +447,9 @@ Make sure to use **Web Safe Fonts** and to close and reopen the overlay after ma
   </tr>
 </table>
 
-### Target window
+### Debugger
 
-Within the `config.ini` file, the `target_window` option allows the overlay to target one of the three available windows in the **Citra** emulator or its variants:
-
-- `main`: This window includes the toolbar at the top and the bottom bar displaying FPS. It's the default configuration in the **Citra** emulator.
-<br>&nbsp;
-- `primary`: This window is separate from the toolbar and FPS bottom bar, presenting a clean window. It's the recommended option for use with the overlay's borderless screen system.
-<br>&nbsp;
-- `secondary`: This window is similar to the primary window but by default shows the secondary screen of the 3DS console. It'll only be visible if the **Screen Layout** option is set to **Separate Windows** within the emulator.
-
-To view the primary window in the **Citra** emulator, follow these steps:
-
-1. Go to the emulator's toolbar.
-2. Click on **View**.
-3. Disable the **Single Window Mode** option.
-
-Remember to close and reopen the overlay after making changes to the `config.ini` file for these adjustments to take effect.
+If the `debugger` option in the `config.ini` file is set to `true`, a .log file will be generated where all application logs will be stored. This option is intended solely for testing and troubleshooting, so its default value is `false`.
 
 <table>
   <tr align="center">
@@ -387,52 +469,17 @@ Remember to close and reopen the overlay after making changes to the `config.ini
     </td>
   </tr>
   <tr align="center">
-    <td>target_window</td>
-    <td>main</td>
-    <td>string</td>
-    <td>Must be main, primary or secondary</td>
-  </tr>
-</table>
-
-<table>
-  <tr align="center">
     <td>
-      <strong>target_window = main</strong>
+      debugger
     </td>
-  </tr>
-  <tr align="center">
     <td>
-      <img alt="main"
-      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/main.webp"
-      style="min-width: 397.5px;" />
+      false
     </td>
-  </tr>
-</table>
-<table>
-  <tr align="center">
     <td>
-        <strong>target_window = primary<strong>
+      boolean
     </td>
-  </tr>
-  <tr>
     <td>
-      <img alt="primary"
-      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/primary.webp"
-      style="min-width: 397.5px;" />
-    </td>
-  </tr>
-</table>
-<table>
-  <tr align="center">
-    <td>
-      <strong>target_window = secondary<strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img alt="secondary"
-      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/secondary.webp"
-      style="min-width: 397.5px;" />
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
     </td>
   </tr>
 </table>
@@ -802,9 +849,11 @@ You will find the `build` in the `build/dist` folder
 
 ## Python modules used
 
-- PySide6 - v6.7.1
+- ahk[binary] - v1.8.0
+- ahk-wmutil - v0.1.0
+- colorama - v0.4.6
+- PySide6 - v6.7.2
 - cx_Freeze - last
 - cursor - v1.3.5
-- colorama - v0.4.6
+- pywin32 - v306
 - art - v6.2
-- ahk[binary] - v1.7.4

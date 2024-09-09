@@ -1,8 +1,9 @@
 import math
-import re
+import os
 import sys
 import time
 import cursor
+import win32gui
 from ahk import AHK, Position
 from ahk_wmutil import wmutil_extension
 from PySide6.QtCore import QTimer, Qt, QThread, Signal
@@ -15,13 +16,17 @@ from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QSizeP
 
 from modules.utils import (
     TextColor,
+    PassiveTimer,
     prevent_keyboard_exit_error,
     rgba_int,
     clear_screen,
     check_connection,
     header,
     current_game,
-    max_monsters
+    max_monsters,
+    logger_init,
+    log_timer,
+    log_error,
 )
 
 
@@ -72,6 +77,8 @@ class Overlay(QWidget):
         self.show_hp_percentage = ConfigOverlay.show_hp_percentage
         self.show_small_monsters = ConfigOverlay.show_small_monsters
         self.is_main_window = ConfigOverlay.target_window == "main"
+        self.debugger = ConfigOverlay.debugger
+        self.pt = PassiveTimer()
         self.initialize_ui()
 
     def initialize_ui(self):
@@ -87,6 +94,11 @@ class Overlay(QWidget):
         target_window_title += "$"
 
         ahk = AHK(version="v2", extensions=[wmutil_extension])
+
+        if self.debugger:
+            logger_init(".log")
+            self.pt.start(5)
+
         self.setWindowTitle("Overlay")
         self.setWindowFlags(
             Qt.WindowType.Tool
@@ -122,6 +134,7 @@ class Overlay(QWidget):
                 color: {color};
                 background-color: {background_color};
                 padding: 5px {15 if self.orientation == 'center' else 10}px;
+                margin: 0 0 5px;
                 """
             )
             label.setSizePolicy(
@@ -198,35 +211,50 @@ class Overlay(QWidget):
         if not win_not_responding:
             win = ahk.find_window(title=target_window_title, title_match_mode="RegEx")
         return win
+    
+    @staticmethod
+    def get_window_position(hwnd):
+        rect = win32gui.GetWindowRect(hwnd)
+        x = rect[0]
+        y = rect[1]
+        width = rect[2] - rect[0]
+        height = rect[3] - rect[1]
+        return Position(x, y, width, height)
 
     def toggle_borderless_screen(self, ahk, target_window_title, not_responding_title):
         try:
             win = self.get_window(ahk, target_window_title, not_responding_title)
             monitor = win.get_monitor()
-            target = win.get_position()
+            target = self.get_window_position(win.id)
             win.set_style("^0xC00000")
             win.set_style("^0x40000")
             self.is_borderless = monitor.size[0] <= target.width and monitor.size[1] - 1 <= target.height
             if self.is_borderless:
                 win.set_style("+0xC00000")
                 win.set_style("+0x40000")
-                win.move(
-                    x=self.initial_window_state.x,
-                    y=self.initial_window_state.y,
-                    width=self.initial_window_state.width,
-                    height=self.initial_window_state.height,
+                win32gui.MoveWindow(
+                    win.id,
+                    self.initial_window_state.x,
+                    self.initial_window_state.y,
+                    self.initial_window_state.width,
+                    self.initial_window_state.height,
+                    True
                 )
             else:
                 self.initial_window_state = target
                 win.set_style("-0xC00000")
                 win.set_style("-0x40000")
-                win.move(
-                    x=monitor.position[0],
-                    y=monitor.position[1],
-                    width=monitor.size[0],
-                    height=monitor.size[1] + 1,
+                win32gui.MoveWindow(
+                    win.id,
+                    monitor.position[0],
+                    monitor.position[1],
+                    monitor.size[0],
+                    monitor.size[1] + 1,
+                    True
                 )
-        except (Exception,):
+        except Exception as error:
+            if self.debugger:
+                log_error(f'Toggle Borderless Error: {error}')
             pass
 
     def wait_init_game(self, labels, label_layouts):
@@ -310,41 +338,55 @@ class Overlay(QWidget):
     def update_position(self, ahk, layout, target_window_title, not_responding_title):
         try:
             win = self.get_window(ahk, target_window_title, not_responding_title)
-            target = win.get_position()
+            target = self.get_window_position(win.id)
             monitor = win.get_monitor()
+            scale_factor = monitor.scale_factor
             self.win_title = win.get_title()
             self.game = current_game(self.win_title)
             self.resize(self.minimumSizeHint())
             self.is_borderless = monitor.size[0] <= target.width and monitor.size[1] - 1 <= target.height
 
-            margin_top = 35
-            margin_bottom = 11
-            margin_left = 11
-            margin_right = 11
+            margin_top = 35 * scale_factor
+            margin_bottom = 11 * scale_factor
+            margin_left = 10 * scale_factor
+            margin_right = 10 * scale_factor
 
             if self.is_borderless:
-                margin_top = 4
-                margin_bottom = 6
-                margin_left = 4
-                margin_right = 4
+                margin_top = 4 * scale_factor
+                margin_bottom = 6 * scale_factor
+                margin_left = 4 * scale_factor
+                margin_right = 4 * scale_factor
 
             if self.is_main_window:
-                margin_top = 56
-                margin_bottom = 42
+                margin_top = 56 * scale_factor
+                margin_bottom = 42 * scale_factor
                 if self.is_borderless:
-                    margin_top = 25
-                    margin_bottom = 34
+                    margin_top = 25 * scale_factor
+                    margin_bottom = 34 * scale_factor
 
             offset_x = (target.x + (target.width - self.geometry().width()) * self.x / 100) + self.fix_offset["x"]
             offset_y = (target.y + (target.height - self.geometry().height()) * self.y / 100) + self.fix_offset["y"]
             layout.setContentsMargins(margin_left, margin_top, margin_right, margin_bottom)
+            if self.debugger:
+                log_timer(self.pt, [
+                    dict(type="info", msg=f'Window Title: {win.title}'),
+                    dict(type="info", msg=f'Window Target: {target}'),
+                    dict(type="info", msg=f'Monitor: {monitor.position} {monitor.size}'),
+                    dict(type="info", msg=f'Borderless: {self.is_borderless}'),
+                    dict(type="info", msg=f'Offsets: {offset_x} {offset_y}'),
+                ])
             self.move(offset_x, offset_y)
             self.is_open_window = True
-        except (Exception,):
+        except Exception as error:
+            if self.debugger:
+                log_timer(self.pt, [
+                    dict(type="error", msg=f'Update Position Error: {error}'),
+                ])
             self.is_open_window = False
 
 
 if __name__ == "__main__":
+    os.environ["QT_FONT_DPI"] = '1'
     prevent_keyboard_exit_error()
     cursor.hide()
     header()
