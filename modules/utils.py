@@ -11,6 +11,7 @@ from typing import TypedDict
 from functools import lru_cache
 from modules.citra import Citra
 from logging.handlers import RotatingFileHandler
+from struct import unpack
 
 green = Fore.GREEN
 yellow = Fore.YELLOW
@@ -24,6 +25,7 @@ max_monsters = 7
 class ResultType(StrEnum):
     INT = "int"
     HEX = "hex"
+    FLOAT = 'float'
 
 
 def clear_screen():
@@ -42,6 +44,8 @@ def read(address: int, size=4, result_type: ResultType = ResultType.INT):
     value = int.from_bytes(value, byteorder="little")
     if result_type == ResultType.HEX:
         value = hex(value)[2:].upper()
+    if result_type == ResultType.FLOAT:
+        value = unpack('!f', bytes.fromhex(hex(value)[2:]))[0]
 
     return value
 
@@ -89,10 +93,28 @@ def current_game(win_title):
         return "MH3G"
     if re.search("4 ULTIMATE", win_title) or re.search("4U", win_title):
         return "MH4U"
-    elif re.search("4G", win_title):
+    if re.search("4G", win_title):
         return "MH4G"
-    elif re.search("XX", win_title):
+    if re.search("4", win_title):
+        return "MH4"
+    if re.search("XX", win_title):
         return "MHXX"
+    if re.search("X", win_title):
+        return "MHX"
+    if re.search("GEN", win_title):
+        return "MHGEN"
+
+
+def get_crown(size, crowns, enable):
+    if not enable or crowns["g"] is None:
+        return ""
+    if crowns["g"] <= size:
+        return " Gold"
+    if crowns["s"] <= size:
+        return " Silver"
+    if crowns["m"] >= size:
+        return " Mini"
+    return ""
 
 
 def check_connection():

@@ -19,6 +19,7 @@ from modules.utils import (
     PassiveTimer,
     prevent_keyboard_exit_error,
     rgba_int,
+    get_crown,
     clear_screen,
     check_connection,
     header,
@@ -37,7 +38,7 @@ class DataFetcher(QThread):
         super().__init__()
         self.show_small_monsters = show_small_monsters
         self.is_3u3g = game in ("MH3U", "MH3G")
-        self.is_4u4g = game in ("MH4U", "MH4G")
+        self.is_4u4g = game in ("MH4U", "MH4G", "MH4")
 
     def run(self):
         while True:
@@ -76,6 +77,8 @@ class Overlay(QWidget):
         self.show_initial_hp = ConfigOverlay.show_initial_hp
         self.show_hp_percentage = ConfigOverlay.show_hp_percentage
         self.show_small_monsters = ConfigOverlay.show_small_monsters
+        self.show_size_multiplier = ConfigOverlay.show_size_multiplier
+        self.show_crown = ConfigOverlay.show_crown
         self.is_main_window = ConfigOverlay.target_window == "main"
         self.debugger = ConfigOverlay.debugger
         self.pt = PassiveTimer()
@@ -83,7 +86,7 @@ class Overlay(QWidget):
 
     def initialize_ui(self):
         target_window_title = (
-            "(MONSTER HUNTER |MH)(3 ULTIMATE|3U|3 \\(tri-\\) G|4 ULTIMATE|4U|4G|XX)"
+            "(MONSTER HUNTER |MH)(3 ULTIMATE|3U|3 \\(tri-\\) G|4|4 ULTIMATE|4U|4G|X|GEN|XX)"
         )
         not_responding_title = " \\([\\w\\s]+\\)$"
         if ConfigOverlay.target_window == "primary":
@@ -119,11 +122,11 @@ class Overlay(QWidget):
 
         color = rgba_int(
             getattr(QColorConstants.Svg, ConfigColors.text_color).rgb(),
-            ConfigColors.text_transparency,
+            ConfigColors.text_opacity,
         )
         background_color = rgba_int(
             getattr(QColorConstants.Svg, ConfigColors.background_color).rgb(),
-            ConfigColors.background_transparency,
+            ConfigColors.background_opacity,
         )
 
         labels = []
@@ -292,10 +295,10 @@ class Overlay(QWidget):
             for index, label in enumerate(labels):
                 if len(data) > index:
                     is_3u3g = self.game in ("MH3U", "MH3G")
-                    is_4u4g = self.game in ("MH4U", "MH4G")
+                    is_4u4g = self.game in ("MH4U", "MH4G", "MH4")
                     label_layout = label_layouts[index]
                     monster = data[index]
-                    large_monster_name = (
+                    large_monster = (
                         Monsters3U3G.large_monsters.get(monster[0])
                         if is_3u3g else Monsters4U4G.large_monsters.get(monster[0])
                         if is_4u4g else MonstersXX.large_monsters.get(monster[0])
@@ -308,8 +311,15 @@ class Overlay(QWidget):
                     hp = monster[1]
                     initial_hp = monster[2]
                     if initial_hp > 5:
-                        if large_monster_name:
-                            text = f"{large_monster_name}:"
+                        if large_monster:
+                            text = ""
+                            size_multiplier = None
+                            if self.show_size_multiplier:
+                                size_multiplier = monster[3]
+                                text += f"({size_multiplier}) "
+                            text += f"{large_monster["name"]}{get_crown(
+                                size_multiplier, large_monster["crowns"], self.show_crown
+                            )}:"
                             if self.show_hp_percentage:
                                 text += f" {math.ceil((hp / initial_hp) * 100)}% |"
                             text += f" {hp}"

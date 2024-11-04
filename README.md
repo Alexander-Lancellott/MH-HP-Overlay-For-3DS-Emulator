@@ -19,17 +19,24 @@ If you liked this overlay, I've also created a port ([MHGU-MHXX-HP-Overlay-For-S
 
 I think I've managed to make the overlay compatible with all existing versions of each game, with or without their updates. Below is a list of the versions where I tested and confirmed that the overlay works correctly:
 
-- MH3G (JPN) - 0004000000048100 - v0(default)
-- MH3U (EUR) - 00040000000B1D00 - v0(default)
-- MH3U (USA) - 00040000000AE400 - v0(default)
+- MH3G (JPN) - 0004000000048100 - v1.0(default)
+- MH3U (EUR) - 00040000000B1D00 - v1.0(default)
+- MH3U (USA) - 00040000000AE400 - v1.0(default)
 <br>&nbsp;
-- MH4G (JPN) - 000400000011D700 - v0(default), v1.1 & v1.2
-- MH4G (Taiwan) - 0004000000141A00 - v0(default) & v1.1
-- MH4U (EUR) - 0004000000126100 - v0(default) & v1.1
-- MH4U (USA) - 0004000000126300 - v0(default) & v1.1
+- MH4 (JPN) - 000400000004B500 - v1.0(default) & v1.1
+- MH4 (Taiwan) - 0004000000100900 - v1.0(default) & v1.1
+- MH4 (Korea) - 0004000000105000 - v1.0(default) & v1.1
+- MH4G (JPN) - 000400000011D700 - v1.0(default), v1.1 & v1.2
+- MH4G (Taiwan) - 0004000000141A00 - v1.0(default) & v1.1
+- MH4U (EUR) - 0004000000126100 - v1.0(default) & v1.1
+- MH4U (USA) - 0004000000126300 - v1.0(default) & v1.1
 <br>&nbsp;
-- MHXX (JPN) - 0004000000197100 - v0(default), v1.1, v1.2, v1.3 & v1.4
-- MHXX (Taiwan) - 00040000001B8100 - v0(default), v1.1, v1.2, v1.3 & v1.4
+- MHX (JPN) - 0004000000155400 - v1.0(default) & v1.3.0
+- MHX (Taiwan) - 000400000017EC00 - v1.0(default) & v1.3.0
+- MHGEN (EUR) - 0004000000185B00 - v1.0(default)
+- MHGEN (USA) - 0004000000187000 - v1.0(default)
+- MHXX (JPN) - 0004000000197100 - v1.0(default), v1.1, v1.2, v1.3 & v1.4
+- MHXX (Taiwan) - 00040000001B8100 - v1.0(default), v1.1, v1.2, v1.3 & v1.4
 
 ## High DPI Scaling (optional, only if you notice it)
 
@@ -225,6 +232,63 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   <tr align="center">
     <td>
       show_small_monsters
+    </td>
+    <td>
+      true
+    </td>
+    <td>
+      boolean
+    </td>
+    <td>
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+</table>
+
+### Show Size Multiplier & Crown
+
+The `show_size_multiplier` and `show_crown` options in the `config.ini` file allow you to show or hide the size multiplier and crown of each monster.
+
+<div align="center">
+
+![Size Multiplier & Crown](https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/size_multiplier_and_crown.png)
+
+</div>
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      show_size_multiplier
+    </td>
+    <td>
+      true
+    </td>
+    <td>
+      boolean
+    </td>
+    <td>
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      show_crown
     </td>
     <td>
       true
@@ -778,9 +842,9 @@ Within the `config.ini` file, you can customize the color of text and background
 <br>&nbsp;
 - `background_color`: Defines the background color of the `labels` in the overlay. Similar to text_color, you can use any valid color name from **CSS SVG Colors**.
 <br>&nbsp;
-- `text_transparency`: Controls the opacity of the text within the `labels`.
+- `text_opacity`: Controls the opacity of the text within the `labels`.
 <br>&nbsp;
-- `background_transparency`: Controls the opacity of the background of the `labels`.
+- `background_opacity`: Controls the opacity of the background of the `labels`.
 
 Adjust these values according to your preferences to customize the visual appearance of the overlay.
 
@@ -820,13 +884,13 @@ Remember to close and reopen the overlay after making changes in the `config.ini
     </td>
   </tr>
   <tr align="center">
-    <td>text_transparency</td>
+    <td>text_opacity</td>
     <td>100</td>
     <td>integer</td>
     <td>Must be greater than or equal to 1 and less than or equal to 100</td>
   </tr>
   <tr align="center">
-    <td>background_transparency</td>
+    <td>background_opacity</td>
     <td>60</td>
     <td>integer</td>
     <td>Must be greater than or equal to 1 and less than or equal to 100</td>
