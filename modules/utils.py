@@ -50,6 +50,10 @@ def read(address: int, size=4, result_type: ResultType = ResultType.INT):
     return value
 
 
+def is_connected():
+    return c.is_connected()
+
+
 def absolute_path(path: str = ""):
     return os.path.abspath(path).replace("\\modules", "")
 
@@ -87,21 +91,21 @@ def header():
 
 
 def current_game(win_title):
-    if re.search("3 ULTIMATE", win_title) or re.search("3U", win_title):
+    if re.search("MONSTER HUNTER 3 ULTIMATE", win_title) or re.search("MH3U", win_title):
         return "MH3U"
-    if re.search("3 \\(tri-\\) G", win_title):
+    if re.search("MONSTER HUNTER 3 \\(tri-\\) G", win_title):
         return "MH3G"
-    if re.search("4 ULTIMATE", win_title) or re.search("4U", win_title):
+    if re.search("MONSTER HUNTER 4 ULTIMATE", win_title) or re.search("MH4U", win_title):
         return "MH4U"
-    if re.search("4G", win_title):
+    if re.search("MONSTER HUNTER 4G", win_title):
         return "MH4G"
-    if re.search("4", win_title):
+    if re.search("MONSTER HUNTER 4", win_title):
         return "MH4"
-    if re.search("XX", win_title):
+    if re.search("MONSTER HUNTER XX", win_title):
         return "MHXX"
-    if re.search("X", win_title):
+    if re.search("MONSTER HUNTER X", win_title):
         return "MHX"
-    if re.search("GEN", win_title):
+    if re.search("MONSTER HUNTER GEN", win_title):
         return "MHGEN"
 
 
@@ -118,13 +122,9 @@ def get_crown(size, crowns, enable):
 
 
 def check_connection():
-    if c.is_connected():
-        try:
-            test = c.read_memory(0x100000, 4)
-            return type(test) is bytes and test != b"\x04\xf0\x1f\xe5"
-        except (Exception,):
-            print(TextColor.red("\nCouldn't connect to 3DS emulator server"))
-            end()
+    if not c.is_connected():
+        print(TextColor.red("\nCouldn't connect to 3DS emulator server"))
+        end()
 
 
 class PassiveTimer:

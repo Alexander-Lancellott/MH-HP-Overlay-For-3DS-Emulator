@@ -2,6 +2,7 @@ import struct
 import random
 import enum
 import socket
+import psutil
 
 CURRENT_REQUEST_VERSION = 1
 MAX_REQUEST_DATA_SIZE = 32
@@ -9,7 +10,7 @@ MAX_PACKET_SIZE = 48
 
 
 class RequestType(enum.IntEnum):
-    ReadMemory = 1,
+    ReadMemory = 1
     WriteMemory = 2
 
 
@@ -21,8 +22,9 @@ class Citra:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.address = address
 
-    def is_connected(self):
-        return self.socket is not None
+    @staticmethod
+    def is_connected():
+        return any(conn.laddr.port == CITRA_PORT for conn in psutil.net_connections())
 
     @staticmethod
     def _generate_header(request_type, data_size):
@@ -40,10 +42,6 @@ class Citra:
         return None
 
     def read_memory(self, read_address, read_size):
-        """
-        >>> c.read_memory(0x100000, 4)
-        b'\\x07\\x00\\x00\\xeb'
-        """
         result = bytes()
         while read_size > 0:
             temp_read_size = min(read_size, MAX_REQUEST_DATA_SIZE)

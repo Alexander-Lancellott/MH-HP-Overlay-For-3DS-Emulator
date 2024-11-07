@@ -425,7 +425,7 @@ Remember to close and reopen the overlay after making changes to the `config.ini
 
 ### HP update time
 
-The `hp_update_time` option in the `config.ini` file allows you to adjust the HP value update interval in seconds. The default value is `0.5`, which is equivalent to 500 milliseconds, and the minimum value is `0.1`.
+The `hp_update_time` option in the `config.ini` file allows you to adjust the HP value update interval in seconds. The default and minimum value is `0.5`, which is equivalent to 500 milliseconds.
 
 You can modify this value to increase or decrease the time interval for updating the HP value.
 
@@ -452,7 +452,7 @@ Remember to close and reopen the overlay after making changes to the `config.ini
     <td>hp_update_time</td>
     <td>0.5</td>
     <td>float</td>
-    <td>Must be greater than or equal to 0.1</td>
+    <td>Must be greater than or equal to 0.5</td>
   </tr>
 </table>
 
@@ -919,5 +919,6 @@ You will find the `build` in the `build/dist` folder
 - PySide6 - v6.7.2
 - cx_Freeze - last
 - cursor - v1.3.5
+- psutil - v6.1.0
 - pywin32 - v306
 - art - v6.2

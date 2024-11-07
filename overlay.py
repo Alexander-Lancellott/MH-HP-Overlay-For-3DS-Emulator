@@ -28,6 +28,7 @@ from modules.utils import (
     logger_init,
     log_timer,
     log_error,
+    is_connected
 )
 
 
@@ -192,7 +193,7 @@ class Overlay(QWidget):
 
         timer1 = QTimer(self)
         timer1.timeout.connect(lambda: self.update_position(ahk, layout, target_window_title, not_responding_title))
-        timer1.start(5)
+        timer1.start(3)
 
         timer2 = QTimer(self)
         timer2.timeout.connect(lambda: self.wait_init_game(labels, label_layouts))
@@ -347,6 +348,13 @@ class Overlay(QWidget):
 
     def update_position(self, ahk, layout, target_window_title, not_responding_title):
         try:
+            conn = is_connected()
+            if not conn and self.data_fetcher:
+                self.data_fetcher.terminate()
+                self.running = False
+                self.is_open_window = False
+                self.hide()
+                time.sleep(5)
             win = self.get_window(ahk, target_window_title, not_responding_title)
             target = self.get_window_position(win.id)
             monitor = win.get_monitor()
@@ -386,7 +394,8 @@ class Overlay(QWidget):
                     dict(type="info", msg=f'Offsets: {offset_x} {offset_y}'),
                 ])
             self.move(offset_x, offset_y)
-            self.is_open_window = True
+            if conn:
+                self.is_open_window = True
         except Exception as error:
             if self.debugger:
                 log_timer(self.pt, [

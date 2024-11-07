@@ -4,7 +4,7 @@ setup(
     name="MH-HP-Overlay-For-3DS-Emulator",
     author="Alexander-Lancellott",
     author_email="alejandrov.lancellotti@gmail.com",
-    version="1.1.0",
+    version="1.1.1",
     packages=find_packages(),
     install_requires=[
         "ahk[binary]==1.8.0",
@@ -12,6 +12,7 @@ setup(
         "colorama==0.4.6",
         "PySide6==6.7.2",
         "cursor==1.3.5",
+        "psutil==6.1.0",
         "pywin32==306",
         "cx_Freeze",
         "art==6.2",

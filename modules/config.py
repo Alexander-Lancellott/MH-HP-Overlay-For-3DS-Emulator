@@ -227,7 +227,7 @@ class ConfigOverlay:
         )
         print_error("hotkey", error)
     hp_update_time = set_option("hp_update_time", Config.Overlay, "getfloat", "0.5")
-    hp_update_time = hp_update_time if hp_update_time >= 0.1 else 0.1
+    hp_update_time = hp_update_time if hp_update_time >= 0.5 else 0.5
     font_family = set_option(
         "font_family", Config.Overlay, "get", "Consolas, monaco, monospace"
     )
