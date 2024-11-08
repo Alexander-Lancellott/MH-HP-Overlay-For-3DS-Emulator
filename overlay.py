@@ -6,7 +6,7 @@ import cursor
 import win32gui
 from ahk import AHK, Position
 from ahk_wmutil import wmutil_extension
-from PySide6.QtCore import QTimer, Qt, QThread, Signal
+from PySide6.QtCore import QTimer, Qt, QThread, Signal, qInstallMessageHandler
 from PySide6.QtGui import QColorConstants
 from modules.mhxx import get_xx_data, MonstersXX
 from modules.mh3u_mh3g import get_3u_3g_data, Monsters3U3G
@@ -349,7 +349,7 @@ class Overlay(QWidget):
     def update_position(self, ahk, layout, target_window_title, not_responding_title):
         try:
             conn = is_connected()
-            if not conn and self.data_fetcher:
+            if not conn and self.is_open_window and self.data_fetcher:
                 self.data_fetcher.terminate()
                 self.running = False
                 self.is_open_window = False
@@ -406,6 +406,7 @@ class Overlay(QWidget):
 
 if __name__ == "__main__":
     os.environ["QT_FONT_DPI"] = '1'
+    qInstallMessageHandler(object)
     prevent_keyboard_exit_error()
     cursor.hide()
     header()
