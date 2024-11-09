@@ -15,6 +15,12 @@ Although I've conducted numerous tests, the overlay may still contain some bugs 
 
 If you liked this overlay, I've also created a port ([MHGU-MHXX-HP-Overlay-For-Switch-Emulator](https://github.com/Alexander-Lancellott/MHGU-MHXX-HP-Overlay-For-Switch-Emulator)) of it for MHGU/MHXX that works with Switch emulators like Ryujinx, Y\*\*\* or S\*\*\*.
 
+You can support me by donating! I’d really appreciate it. But either way, thank you for using this mod!
+
+<a href='https://ko-fi.com/B0B115WKYH' target='_blank'>
+  <img height='45' style='border:0px;height:45px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+</a>
+
 ## Compatibility
 
 I think I've managed to make the overlay compatible with all existing versions of each game, with or without their updates. Below is a list of the versions where I tested and confirmed that the overlay works correctly:
