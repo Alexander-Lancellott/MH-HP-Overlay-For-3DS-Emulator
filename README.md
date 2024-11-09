@@ -9,7 +9,7 @@
 
 ## Description
 
-A simple open-source HP overlay that I've developed for MH3U/3G, MH4U/4G, and MHXX in Python. This overlay is designed to be used with the [Citra](https://citra-emulator.com/) emulator and its variants, such as [Lime3DS](https://github.com/Lime3DS/Lime3DS) and [Citra-Enhanced](https://github.com/CitraEnhanced/citra) on their PC (Windows) versions.
+A simple open-source HP overlay that I've developed for MH 3G/3U, MH 4/U/G, and MH X/GEN/XX in Python. This overlay is designed to be used with the [Citra](https://citra-emulator.com/) emulator and its variants, such as [Lime3DS](https://github.com/Lime3DS/Lime3DS) and [Citra-Enhanced](https://github.com/CitraEnhanced/citra) on their PC (Windows) versions.
 
 Although I've conducted numerous tests, the overlay may still contain some bugs that I haven't detected. If you encounter any issues, I would appreciate it if you could report them by opening an issue and providing any evidence that allows for replication.
 
