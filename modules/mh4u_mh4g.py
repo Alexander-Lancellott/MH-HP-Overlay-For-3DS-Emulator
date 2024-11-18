@@ -30,6 +30,7 @@ def get_4u_4g_data(show_small_monsters: bool):
         }
     else:
         addresses = {
+            0xEF6D94: {0x8332CC0},
             0xF031FC: {0x831A360},
             0xF12214: {0x831A7D0, 0x831A840},
             0xF32004: {0x83531A0, 0x8353610}

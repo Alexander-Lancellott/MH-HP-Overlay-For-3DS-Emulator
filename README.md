@@ -3,7 +3,7 @@
 <div align="center">
 
   [![StaticBadge](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
-  [![App](https://img.shields.io/badge/App-1.0.0-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
+  [![App](https://img.shields.io/badge/App-1.1.2-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
 
 </div>
 
@@ -34,6 +34,7 @@ I think I've managed to make the overlay compatible with all existing versions o
 - MH4 (Korea) - 0004000000105000 - v1.0(default) & v1.1
 - MH4G (JPN) - 000400000011D700 - v1.0(default), v1.1 & v1.2
 - MH4G (Taiwan) - 0004000000141A00 - v1.0(default) & v1.1
+- MH4G (Korea) - 0004000000153200 - v1.0(default)
 - MH4U (EUR) - 0004000000126100 - v1.0(default) & v1.1
 - MH4U (USA) - 0004000000126300 - v1.0(default) & v1.1
 <br>&nbsp;
