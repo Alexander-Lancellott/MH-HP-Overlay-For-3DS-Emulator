@@ -214,6 +214,12 @@ class ConfigOverlay:
     show_crown = set_option(
         "show_crown", Config.Overlay, "getboolean", "true"
     )
+    show_abnormal_status = set_option(
+        "show_abnormal_status", Config.Overlay, "getboolean", "true"
+    )
+    always_show_abnormal_status = set_option(
+        "always_show_abnormal_status", Config.Overlay, "getboolean", "false"
+    )
     target_window = set_option("target_window", Config.Overlay, "get", "main")
     if target_window not in ("main", "primary", "secondary"):
         error = "It can only be main, primary or secondary"
@@ -275,4 +281,32 @@ class ConfigColors:
     background_opacity = set_option("background_opacity", Config.Colors, "getint", "60")
     background_opacity = (
         background_opacity if 1 <= background_opacity <= 100 else 60
+    )
+    abnormal_status_text_color = set_option(
+        "abnormal_status_text_color", Config.Colors, "get", "gold"
+    )
+    if abnormal_status_text_color not in colors:
+        error = (
+            "Invalid CSS SVG Color. "
+            "Check this: https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg"
+        )
+        print_error("abnormal_status_text_color", error)
+    abnormal_status_background_color = set_option(
+        "abnormal_status_background_color", Config.Colors, "get", "limegreen"
+    )
+    if abnormal_status_background_color not in colors:
+        error = (
+            "Invalid CSS SVG Color. "
+            "Check this: https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg"
+        )
+        print_error("abnormal_status_background_color", error)
+    abnormal_status_text_opacity = set_option(
+        "abnormal_status_text_opacity", Config.Colors, "getint", "100"
+    )
+    abnormal_status_text_opacity = abnormal_status_text_opacity if 1 <= abnormal_status_text_opacity <= 100 else 100
+    abnormal_status_background_opacity = set_option(
+        "abnormal_status_background_opacity", Config.Colors, "getint", "25"
+    )
+    abnormal_status_background_opacity = (
+        abnormal_status_background_opacity if 1 <= abnormal_status_background_opacity <= 100 else 60
     )

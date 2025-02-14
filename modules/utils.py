@@ -20,6 +20,7 @@ reset = Fore.RESET
 
 c = Citra()
 max_monsters = 7
+max_status = 8
 
 
 class ResultType(StrEnum):
@@ -45,7 +46,7 @@ def read(address: int, size=4, result_type: ResultType = ResultType.INT):
     if result_type == ResultType.HEX:
         value = hex(value)[2:].upper()
     if result_type == ResultType.FLOAT:
-        value = unpack('!f', bytes.fromhex(hex(value)[2:]))[0]
+        value = unpack('!f', bytes.fromhex(hex(value)[2:].zfill(8)))[0]
 
     return value
 
