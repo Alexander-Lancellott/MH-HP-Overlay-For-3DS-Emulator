@@ -966,6 +966,14 @@ Within the `config.ini` file, you can customize the color of text and background
 - `text_opacity`: Controls the opacity of the text within the `labels`.
 <br>&nbsp;
 - `background_opacity`: Controls the opacity of the background of the `labels`.
+<br>&nbsp;
+- `abnormal_status_text_color`: It's the same as `text_color` but for `abnormal status labels`.
+<br>&nbsp;
+- `abnormal_status_background_color`: It's the same as `background_color` but for `abnormal status labels`.
+<br>&nbsp;
+- `abnormal_status_text_opacity`: It's the same as `text_opacity` but for `abnormal status labels`.
+<br>&nbsp;
+- `abnormal_status_background_opacity`: It's the same as `background_opacity` but for `abnormal status labels`.
 
 Adjust these values according to your preferences to customize the visual appearance of the overlay.
 
@@ -1013,6 +1021,34 @@ Remember to close and reopen the overlay after making changes in the `config.ini
   <tr align="center">
     <td>background_opacity</td>
     <td>60</td>
+    <td>integer</td>
+    <td>Must be greater than or equal to 1 and less than or equal to 100</td>
+  </tr>
+  <tr align="center">
+    <td>abnormal_status_text_color</td>
+    <td>gold</td>
+    <td>string</td>
+    <td>
+      Must be a <a href="https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg">CSS SVG Color</a>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>abnormal_status_background_color</td>
+    <td>limegreen</td>
+    <td>string</td>
+    <td>
+      Must be a <a href="https://upload.wikimedia.org/wikipedia/commons/2/2b/SVG_Recognized_color_keyword_names.svg">CSS SVG Color</a>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>abnormal_status_text_opacity</td>
+    <td>100</td>
+    <td>integer</td>
+    <td>Must be greater than or equal to 1 and less than or equal to 100</td>
+  </tr>
+  <tr align="center">
+    <td>abnormal_status_background_opacity</td>
+    <td>25</td>
     <td>integer</td>
     <td>Must be greater than or equal to 1 and less than or equal to 100</td>
   </tr>
