@@ -3,7 +3,7 @@
 <div align="center">
 
   [![StaticBadge](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
-  [![App](https://img.shields.io/badge/App-1.1.2-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
+  [![App](https://img.shields.io/badge/App-1.1.3-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
 
 </div>
 
@@ -299,6 +299,120 @@ The `show_size_multiplier` and `show_crown` options in the `config.ini` file all
     </td>
     <td>
       true
+    </td>
+    <td>
+      boolean
+    </td>
+    <td>
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+</table>
+
+### Show Abnormal Status
+
+The `show_abnormal_status` option in the `config.ini` file allows you to enable or disable the display of abnormal status for large monsters. To see this information, the monsters must be targeted with the lock-on camera.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Monster 1</strong>
+    </td>
+    <td>
+      <strong>Monster 2</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img alt="abnormal_status"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/abnormal_status_1.webp"
+      style="max-width: 250px;"/>
+    </td>
+    <td>
+      <img alt="abnormal_status"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_crop,h_931,w_400,c_thumb,g_face,q_auto:best/MH-HP-Overlay/abnormal_status_2.webp" 
+      style="max-width: 250px;"/>
+    </td>
+  </tr>
+</table>
+
+These abnormal statuses are self-explanatory, except for the `Rage` state, which is not an abnormal status but a `timer` that indicates how long the monster will remain enraged. This can be useful, for example, to anticipate when Teostra will unleash its Supernova, as it does so upon exiting its enraged state.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      show_abnormal_status
+    </td>
+    <td>
+      true
+    </td>
+    <td>
+      boolean
+    </td>
+    <td>
+      This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+</table>
+
+### Always show abnormal status
+
+The `always_show_abnormal_status` option in the `config.ini` file allows abnormal statuses to always be displayed without the need to target a monster with the lock-on camera.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>always_show_abnormal_status = true</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      <img alt="abnormal_status"
+      src="https://res.cloudinary.com/dms5y8rug/image/upload/c_thumb,g_face,q_auto:best/MH-HP-Overlay/abnormal_status_3.webp" 
+      style="max-width: 290px;"/>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      always_show_abnormal_status
+    </td>
+    <td>
+      false
     </td>
     <td>
       boolean
