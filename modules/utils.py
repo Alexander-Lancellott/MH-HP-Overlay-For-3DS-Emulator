@@ -41,14 +41,16 @@ def rgba_int(rgb_int, alpha=100):
 
 
 def read(address: int, size=4, result_type: ResultType = ResultType.INT):
-    value = c.read_memory(address, size)
-    value = int.from_bytes(value, byteorder="little")
-    if result_type == ResultType.HEX:
-        value = hex(value)[2:].upper()
-    if result_type == ResultType.FLOAT:
-        value = unpack('!f', bytes.fromhex(hex(value)[2:].zfill(8)))[0]
-
-    return value
+    if address < 0x100000:
+        return 0x0
+    else:
+        value = c.read_memory(address, size)
+        value = int.from_bytes(value, byteorder="little")
+        if result_type == ResultType.HEX:
+            value = hex(value)[2:].upper()
+        if result_type == ResultType.FLOAT:
+            value = unpack('!f', bytes.fromhex(hex(value)[2:].zfill(8)))[0]
+        return value
 
 
 def is_connected():
