@@ -34,7 +34,7 @@ def get_4u_4g_data(show_small_monsters: bool, game: str):
         addresses = {
             0xEF6D94: {0x8332CC0},
             0xF031FC: {0x831A360},
-            0xF12214: {0x831A7D0, 0x831A840},
+            0xF12214: {0x831A7D0, 0x831A840, 0x831D8A0},
             0xF32004: {0x83531A0, 0x8353610}
         }
 
@@ -531,4 +531,3 @@ if __name__ == "__main__":
             print([small_monster_name, *monster[1::]])
     end_time = time.time()
     print(end_time - start_time)
-
