@@ -1091,7 +1091,7 @@ You will find the `build` in the `build/dist` folder
 - ahk-wmutil - v0.1.0
 - colorama - v0.4.6
 - PySide6 - v6.7.2
-- cx_Freeze - last
+- cx_Freeze - v8.0.0
 - cursor - v1.3.5
 - psutil - v6.1.0
 - pywin32 - v306

@@ -14,7 +14,7 @@ setup(
         "cursor==1.3.5",
         "psutil==6.1.0",
         "pywin32==306",
-        "cx_Freeze",
+        "cx_Freeze==8.0.0",
         "art==6.2",
     ],
     python_requires=">=3.8",
