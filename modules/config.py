@@ -232,6 +232,14 @@ class ConfigOverlay:
             "The symbols *, ~, $ and UP are not allowed."
         )
         print_error("hotkey", error)
+    reset_hotkey = set_option("reset_hotkey", Config.Overlay, "get", "^r")
+    if not re.search(hotkey_regex, reset_hotkey):
+        error = (
+            "Invalid hotkey. "
+            "Check this: https://www.autohotkey.com/docs/v1/Hotkeys.htm#Symbols "
+            "The symbols *, ~, $ and UP are not allowed."
+        )
+        print_error("reset_hotkey", error)
     hp_update_time = set_option("hp_update_time", Config.Overlay, "getfloat", "0.5")
     hp_update_time = hp_update_time if hp_update_time >= 0.5 else 0.5
     font_family = set_option(

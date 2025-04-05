@@ -3,7 +3,7 @@
 <div align="center">
 
   [![StaticBadge](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
-  [![App](https://img.shields.io/badge/App-1.1.5-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
+  [![App](https://img.shields.io/badge/App-1.1.6-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
 
 </div>
 
@@ -313,6 +313,11 @@ The `show_size_multiplier` and `show_crown` options in the `config.ini` file all
 
 The `show_abnormal_status` option in the `config.ini` file allows you to enable or disable the display of abnormal status for large monsters. To see this information, the monsters must be targeted with the lock-on camera.
 
+> [!IMPORTANT]
+> Keep in mind that in multiplayer mode, abnormal status damage counters (like poison, paralysis, etc.) will only display correctly if you're the host of the quest. If you're not the host, those counters will remain at 0 — except for the **Rage** label, which seems to work properly in all cases.
+> 
+>This behavior can't be fixed, as it's simply how MH games on the 3DS work. I've confirmed this in MHXX, but it's very likely the same happens in the other 3DS MH titles as well.
+
 <table>
   <tr align="center">
     <td>
@@ -509,11 +514,15 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   </tr>
 </table>
 
-### Hotkey
+### Hotkey & Reset hotkey
 
 The `config.ini` file includes the `hotkey` option, which defines the keyboard shortcut used to toggle the borderless screen system on/off. By default, this shortcut is `Ctrl + Alt + F`. You can replace it with another shortcut if the default one is inconvenient for you.
 
 It's important to note that special keys such as `Ctrl`, `Shift`, or `Alt` are represented by specific symbols. It's recommended to refer to the following [documentation](https://www.autohotkey.com/docs/v1/Hotkeys.htm#Symbols) to ensure you're using the correct symbols when editing the shortcut. The symbols `*`, `~`, `$` aren't allowed.
+
+In addition, the `config.ini` file also includes a separate option called `reset_hotkey`. This defines a keyboard shortcut used to forcefully reset the overlay in case it becomes frozen or unresponsive due to unexpected behavior. This is especially useful for quickly recovering without having to close and reopen the application manually.
+
+By default, the reset_hotkey is set to `Ctrl + R`. You can change it to any other valid combination that suits your needs.
 
 Remember to close and reopen the overlay after making changes to the `config.ini` file for these adjustments to take effect.
 
@@ -537,6 +546,14 @@ Remember to close and reopen the overlay after making changes to the `config.ini
   <tr align="center">
     <td>hotkey</td>
     <td>^!f</td>
+    <td>string</td>
+    <td>
+      Must be valid hotkey, check this: https://www.autohotkey.com/docs/v1/Hotkeys.htm#Symbols
+    </td>
+  </tr>
+  <tr align="center">
+    <td>reset_hotkey</td>
+    <td>^r</td>
     <td>string</td>
     <td>
       Must be valid hotkey, check this: https://www.autohotkey.com/docs/v1/Hotkeys.htm#Symbols

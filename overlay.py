@@ -29,7 +29,10 @@ from modules.utils import (
     logger_init,
     log_timer,
     log_error,
-    is_connected
+    is_connected,
+    enable_ansi_colors,
+    disable_quick_edit,
+    reset_app
 )
 
 
@@ -76,6 +79,7 @@ class Overlay(QWidget):
         self.y = ConfigLayout.y
         self.fix_offset = dict(x=ConfigLayout.fix_x, y=ConfigLayout.fix_y)
         self.hotkey = ConfigOverlay.hotkey
+        self.reset_hotkey = ConfigOverlay.reset_hotkey
         self.hp_update_time = round(ConfigOverlay.hp_update_time * 1000)
         self.show_initial_hp = ConfigOverlay.show_initial_hp
         self.show_hp_percentage = ConfigOverlay.show_hp_percentage
@@ -238,6 +242,9 @@ class Overlay(QWidget):
 
         self.update_position(ahk, layout, target_window_title, not_responding_title)
 
+        ahk.add_hotkey(
+            f"{self.reset_hotkey} Up", reset_app,
+        )
         ahk.add_hotkey(
             f"{self.hotkey} Up",
             callback=lambda: self.toggle_borderless_screen(ahk, target_window_title, not_responding_title),
@@ -519,6 +526,8 @@ class Overlay(QWidget):
 if __name__ == "__main__":
     os.environ["QT_FONT_DPI"] = '1'
     qInstallMessageHandler(object)
+    enable_ansi_colors()
+    disable_quick_edit()
     prevent_keyboard_exit_error()
     cursor.hide()
     header()
