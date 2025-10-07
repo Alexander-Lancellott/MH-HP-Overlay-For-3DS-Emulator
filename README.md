@@ -9,7 +9,17 @@
 
 ## Description
 
-A simple open-source HP overlay that I've developed for MH 3G/3U, MH 4/U/G, and MH X/GEN/XX in Python. This overlay is designed to be used with the [Citra](https://citra-emulator.com/) emulator and its variants, such as [Lime3DS](https://github.com/Lime3DS/Lime3DS) and [Citra-Enhanced](https://github.com/CitraEnhanced/citra) on their PC (Windows) versions.
+A simple open-source HP overlay that I've developed for MH 3G/3U, MH 4/U/G, and MH X/GEN/XX in Python. This overlay is designed to be used with the [Citra](https://citra-emulator.com/) emulator and its variants, such as [
+Azahar](https://github.com/azahar-emu/azahar) and [Mandarine](https://github.com/mandarine3ds/mandarine) on their PC (Windows) versions.
+
+> [!IMPORTANT] 
+> **Important Note for Azahar Users**
+>
+> To make the HP Overlay work properly with **Azahar**, you must enable the **“Enable RPC server”** option in Azahar’s settings.  
+>  
+> This option allows the Overlay to read the game’s memory. Unlike Citra — where the RPC server was always active — Azahar lets you toggle it on or off, and it’s **disabled by default**.  
+>  
+> If you can’t find this option, check [this GitHub issue](<link>) for more details.
 
 Although I've conducted numerous tests, the overlay may still contain some bugs that I haven't detected. If you encounter any issues, I would appreciate it if you could report them by opening an issue and providing any evidence that allows for replication.
 
