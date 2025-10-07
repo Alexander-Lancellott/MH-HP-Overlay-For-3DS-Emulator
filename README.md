@@ -19,7 +19,7 @@ Azahar](https://github.com/azahar-emu/azahar) and [Mandarine](https://github.com
 >  
 > This option allows the Overlay to read the game’s memory. Unlike Citra — where the RPC server was always active — Azahar lets you toggle it on or off, and it’s **disabled by default**.  
 >  
-> If you can’t find this option, check [this GitHub issue](<link>) for more details.
+> If you can’t find this option, check [this GitHub issue](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator/issues/13) for more details.
 
 Although I've conducted numerous tests, the overlay may still contain some bugs that I haven't detected. If you encounter any issues, I would appreciate it if you could report them by opening an issue and providing any evidence that allows for replication.
 
