@@ -18,8 +18,8 @@ def get_data(p0: int, offset: int, is_mhx_g: bool):
 
     return [
         read(p3 + (0x59DC if is_mhx_g else 0x5A18), 2),
-        read(p3, 2),
-        read(p3 + 0x4, 2),
+        read(p3),
+        read(p3 + 0x4),
         is_visible,
         p3,
     ]

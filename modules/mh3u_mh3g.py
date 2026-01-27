@@ -14,7 +14,7 @@ def get_data(p0: int, offset: int):
     if p4 > 0x965:
         is_visible = read(p4 + 0x14A, 2) == 0x3E8 and read(p4 - 0x78, 16) == 0x3CF5C28F
 
-    return [read(p4 - 0x7F5, 2), read(p4, 2), read(p4 + 0x4, 2), is_visible, p4]
+    return [read(p4 - 0x7F5, 2), read(p4), read(p4 + 0x4), is_visible, p4]
 
 
 def get_3u_3g_data(show_small_monsters: bool, game: str):

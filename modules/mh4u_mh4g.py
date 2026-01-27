@@ -11,7 +11,7 @@ def get_data(p0: int, offset: int, is_mh4: bool):
     p3 = read(p2) + 0x3E8
     is_visible = read(p3 - 0x21E, 3) != 0xBFF0C
 
-    return [read(p3 - 0x228, 1), read(p3, 2), read(p3 + 0x4, 2), is_visible, p3]
+    return [read(p3 - 0x228, 1), read(p3), read(p3 + 0x4), is_visible, p3]
 
 
 def get_4u_4g_data(show_small_monsters: bool, game: str):
