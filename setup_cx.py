@@ -6,6 +6,7 @@ build_exe_options = {
     "include_files": [
         absolute_path(".venv\\Scripts\\AutoHotkey.exe"),
         absolute_path(".venv\\Scripts\\AutoHotkeyV2.exe"),
+        absolute_path("locales"),
         absolute_path("config.ini"),
         absolute_path("LICENSE"),
         absolute_path("README.md"),
@@ -17,7 +18,7 @@ build_exe_options = {
 
 setup(
     name="MH-HP-Overlay",
-    version="1.1.8",
+    version="1.1.9",
     author="Alexander-Lancellott",
     description="MH-HP-Overlay",
     options={"build_exe": build_exe_options},

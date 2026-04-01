@@ -3,7 +3,7 @@
 <div align="center">
 
   [![StaticBadge](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
-  [![App](https://img.shields.io/badge/App-1.1.8-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
+  [![App](https://img.shields.io/badge/App-1.1.9-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
 
 </div>
 
@@ -434,6 +434,52 @@ The `always_show_abnormal_status` option in the `config.ini` file allows abnorma
     </td>
     <td>
       This is case-insensitive and recognizes boolean values from 'yes'/'no', 'on'/'off', 'true'/'false' and '1'/'0'
+    </td>
+  </tr>
+</table>
+
+### Language
+
+The `language` option in the `config.ini` file allows you to specify the overlay’s language. By default, the overlay uses `en_US`, which does not require any external `.yaml` file.
+
+Currently, only one example translation file is included: `es_ES.yaml.example`. This is an **incomplete Spanish translation**, provided as a reference. It includes some translated strings, but most large and small monster names are still missing.
+
+If you'd like to use this example translation, rename the file to `es_ES.yaml` (remove the `.example` extension), complete the missing entries, and set `language=es_ES` in your `config.ini`, or use the name of your translation file without the `.yaml` extension.
+
+> [!NOTE]
+> In the `language` option of the `config.ini` file, make sure to enter only the filename without the `.yaml` extension.
+
+You’re also free to create your own translation file. Just use the `es_ES.yaml.example` file as a starting point and place your completed file inside the locales folder.
+
+<table>
+  <tr align="center">
+    <td>
+      <strong>Option</strong>
+    </td>
+    <td>
+      <strong style="white-space: nowrap; ">
+        Default value
+      </strong>
+    </td>
+    <td>
+      <strong>Type</strong>
+    </td>
+    <td>
+      <strong>Observation</strong>
+    </td>
+  </tr>
+  <tr align="center">
+    <td>
+      language
+    </td>
+    <td>
+      en_US
+    </td>
+    <td>
+      string
+    </td>
+    <td>
+      You must use one of the available languages from the locales folder by writing only the filename without the .yaml extension, or create your own translation file (.yaml). Except for 'en_US', which does not require a file as it is the default language.
     </td>
   </tr>
 </table>
@@ -1106,3 +1152,4 @@ You will find the `build` in the `build/dist` folder
 - psutil - v6.1.0
 - pywin32 - v306
 - art - v6.2
+- PyYAML - v6.0.2

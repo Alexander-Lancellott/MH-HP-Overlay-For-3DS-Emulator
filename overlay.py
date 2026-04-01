@@ -32,7 +32,8 @@ from modules.utils import (
     is_connected,
     enable_ansi_colors,
     disable_quick_edit,
-    reset_app
+    reset_app,
+    Translator
 )
 
 
@@ -86,6 +87,7 @@ class Overlay(QWidget):
         self.show_small_monsters = ConfigOverlay.show_small_monsters
         self.show_abnormal_status = ConfigOverlay.show_abnormal_status
         self.always_show_abnormal_status = ConfigOverlay.always_show_abnormal_status
+        self.t = Translator(ConfigOverlay.language)
         self.show_size_multiplier = ConfigOverlay.show_size_multiplier
         self.show_crown = ConfigOverlay.show_crown
         self.is_main_window = ConfigOverlay.target_window == "main"
@@ -231,6 +233,7 @@ class Overlay(QWidget):
                 label_layout.addLayout(status_layouts[index + 2])
                 label_layout.addLayout(status_layouts[index + 4])
                 label_layout.addLayout(status_layouts[index + 6])
+                label_layout.addLayout(status_layouts[index + 8])
                 lm_layout.addLayout(label_layout)
             else:
                 sm_layout.addLayout(label_layout)
@@ -396,9 +399,10 @@ class Overlay(QWidget):
                             if self.show_size_multiplier:
                                 size_multiplier = monster[3]
                                 text += f"({size_multiplier}) "
-                            text += f"{large_monster["name"]}{get_crown(
-                                size_multiplier, large_monster["crowns"], self.show_crown
-                            )}:"
+                            text += (
+                                f"{self.t(large_monster['name'])}"
+                                f"{self.t(get_crown(size_multiplier, large_monster['crowns'], self.show_crown))}:"
+                            )
                             if self.show_hp_percentage:
                                 text += f" {math.ceil((hp / initial_hp) * 100)}% |"
                             text += f" {hp}"
@@ -412,19 +416,21 @@ class Overlay(QWidget):
                                 i = 0
                                 for key, value in abnormal_status.items():
                                     status_label = status_labels[i if monster_number == 1 else i + max_status]
-                                    if key == "Rage":
+                                    if key in ("Rage", "Frenzy", "Frenzy CD", "Apex", "Apex CD"):
                                         m, s = divmod(value, 60)
-                                        status_label.setText(f"{key}: {m}:{s:02d}")
+                                        status_label.setText(f"{self.t(key)}: {m}:{s:02d}")
                                     else:
-                                        status_label.setText(f"{key}: {value[0]}/{value[1]}")
+                                        status_label.setText(f"{self.t(key)}: {value[0]}/{value[1]}")
                                     if i < 2:
                                         status_layouts[index].addWidget(status_label)
                                     elif i < 4:
                                         status_layouts[2 + index].addWidget(status_label)
                                     elif i < 6:
                                         status_layouts[4 + index].addWidget(status_label)
-                                    else:
+                                    elif i < 8:
                                         status_layouts[6 + index].addWidget(status_label)
+                                    else:
+                                        status_layouts[8 + index].addWidget(status_label)
                                     i += 1
 
                             if self.show_abnormal_status:
@@ -449,7 +455,7 @@ class Overlay(QWidget):
                             label_layout.insertWidget(0, label)
                         if self.show_small_monsters:
                             if small_monster_name and hp < 20000:
-                                text = f"{small_monster_name}:"
+                                text = f"{self.t(small_monster_name)}:"
                                 if self.show_hp_percentage:
                                     text += f" {math.ceil((hp / initial_hp) * 100)}% |"
                                 text += f" {hp}"
