@@ -18,7 +18,7 @@ build_exe_options = {
 
 setup(
     name="MH-HP-Overlay",
-    version="1.1.9",
+    version="1.1.10",
     author="Alexander-Lancellott",
     description="MH-HP-Overlay",
     options={"build_exe": build_exe_options},

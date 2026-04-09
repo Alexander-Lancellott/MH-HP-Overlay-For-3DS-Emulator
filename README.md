@@ -3,7 +3,7 @@
 <div align="center">
 
   [![StaticBadge](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
-  [![App](https://img.shields.io/badge/App-1.1.9-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
+  [![App](https://img.shields.io/badge/App-1.1.10-green)](https://github.com/Alexander-Lancellott/MH-HP-Overlay-For-3DS-Emulator)
 
 </div>
 
@@ -450,6 +450,9 @@ If you'd like to use this example translation, rename the file to `es_ES.yaml` (
 > In the `language` option of the `config.ini` file, make sure to enter only the filename without the `.yaml` extension.
 
 You’re also free to create your own translation file. Just use the `es_ES.yaml.example` file as a starting point and place your completed file inside the locales folder.
+
+> [!TIP]
+> The user [Link1145](https://github.com/Link1145) provided the `zh_CN` translation. If you find any errors, please try to contact them; otherwise, If you have native-level proficiency in the language, feel free to correct it yourself and submit the changes via a **PR** or **by opening an issue**.
 
 <table>
   <tr align="center">
