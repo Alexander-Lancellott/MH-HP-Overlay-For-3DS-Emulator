@@ -4,7 +4,7 @@ import enum
 import socket
 import psutil
 
-CURRENT_REQUEST_VERSION = 1
+CURRENT_REQUEST_VERSION = 2
 MAX_REQUEST_DATA_SIZE = 1024
 MAX_PACKET_SIZE = 1024 + 0x10
 
