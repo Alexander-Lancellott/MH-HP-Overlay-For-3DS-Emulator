@@ -12,6 +12,7 @@ from modules.mhxx import get_xx_data, get_xx_monster_selected, MonstersXX
 from modules.mh3u_mh3g import get_3u_3g_data, get_3u_3g_monster_selected, Monsters3U3G
 from modules.mh4u_mh4g import get_4u_4g_data, get_4u_4g_monster_selected, Monsters4U4G
 from modules.config import ConfigOverlay, ConfigLayout, ConfigColors
+from modules.citra import connect_rpc
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy
 
 from modules.utils import (
