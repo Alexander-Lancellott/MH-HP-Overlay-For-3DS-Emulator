@@ -2,11 +2,20 @@ import struct
 import random
 import enum
 import socket
+import time
 import psutil
 
+# RPC protocol version spoken by this client. It is NOT fixed: negotiate_version() /
+# connect_rpc() try the newest version first and keep the one that works for the session.
+#   2 -> Azahar 2126.2 and newer (strict: any other version gets an empty reply)
+#   1 -> older Azahar versions and Citra
 CURRENT_REQUEST_VERSION = 2
+SUPPORTED_REQUEST_VERSIONS = (2, 1)  # order matters: newest first
 MAX_REQUEST_DATA_SIZE = 1024
 MAX_PACKET_SIZE = 1024 + 0x10
+
+PROBE_ADDRESS = 0x100000  # start of the game's code, readable as soon as a game is loaded
+PROBE_TIMEOUT = 0.5  # seconds to wait for each version before trying the next one
 
 
 class RequestType(enum.IntEnum):
@@ -41,6 +50,56 @@ class Citra:
             expected_type == reply_type and
             reply_data_size == len(raw_reply[4*4:])):
             return raw_reply[4*4:]
+        return None
+
+    def _probe_version(self, version):
+        """
+        Reads 4 bytes of game memory using the given protocol version.
+        True only if the emulator answers with a valid reply carrying the data.
+        """
+        request_data = struct.pack("II", PROBE_ADDRESS, 4)
+        request_id = random.getrandbits(32)
+        request = struct.pack("IIII", version, request_id, RequestType.ReadMemory, len(request_data))
+        request += request_data
+        self.socket.sendto(request, (self.address, CITRA_PORT))
+
+        deadline = time.monotonic() + PROBE_TIMEOUT
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return False  # no answer (old emulators ignore unknown versions)
+            self.socket.settimeout(remaining)
+            try:
+                raw_reply = self.socket.recv(MAX_PACKET_SIZE)
+            except OSError:  # timeout, or "connection reset" when nothing listens on the port
+                return False
+            if len(raw_reply) < 4*4:
+                continue
+            reply_version, reply_id, reply_type, reply_data_size = struct.unpack("IIII", raw_reply[:4*4])
+            if reply_id != request_id:
+                continue  # late reply to an earlier probe, ignore it
+            return (reply_version == version and
+                    reply_type == RequestType.ReadMemory and
+                    reply_data_size == 4 and
+                    len(raw_reply) == 4*4 + 4)
+
+    def negotiate_version(self):
+        """
+        Finds out which RPC protocol version the emulator understands.
+        Version 2 is tried first, then version 1. The first one that works is kept
+        (CURRENT_REQUEST_VERSION) and used for every later request in this session.
+        Returns the version in use, or None if the emulator answers to none of them.
+        """
+        global CURRENT_REQUEST_VERSION
+        previous_timeout = self.socket.gettimeout()
+        try:
+            for version in SUPPORTED_REQUEST_VERSIONS:
+                if self._probe_version(version):
+                    CURRENT_REQUEST_VERSION = version
+                    return version
+        finally:
+            self.socket.settimeout(previous_timeout)
+        CURRENT_REQUEST_VERSION = SUPPORTED_REQUEST_VERSIONS[0]
         return None
 
     def process_list(self):
@@ -143,6 +202,19 @@ class Citra:
             else:
                 return False
         return True
+
+
+def connect_rpc():
+    """
+    Connects to the emulator's RPC server and picks the protocol version (2 first, then 1).
+    Uses a throwaway socket, so the sockets used to read memory are not touched.
+    Returns the version in use (2 or 1), or None if the server does not answer to either.
+    """
+    probe = Citra()
+    try:
+        return probe.negotiate_version()
+    finally:
+        probe.socket.close()
 
 
 if "__main__" == __name__:
