@@ -12,6 +12,7 @@ from modules.mhxx import get_xx_data, get_xx_monster_selected, MonstersXX
 from modules.mh3u_mh3g import get_3u_3g_data, get_3u_3g_monster_selected, Monsters3U3G
 from modules.mh4u_mh4g import get_4u_4g_data, get_4u_4g_monster_selected, Monsters4U4G
 from modules.config import ConfigOverlay, ConfigLayout, ConfigColors
+from modules.citra import connect_rpc
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy
 
 from modules.utils import (
@@ -75,6 +76,9 @@ class Overlay(QWidget):
         self.timeout = (20 * 60) + 1  # 20 minutes
         self.counter = self.timeout
         self.timeout_start = time.time()
+        self.rpc_ok = None
+        self.rpc_next_try = 0
+        self.redraw_console = False
         self.orientation = ConfigLayout.orientation
         self.x = ConfigLayout.x
         self.y = ConfigLayout.y
@@ -324,11 +328,39 @@ class Overlay(QWidget):
                 log_error(f'Toggle Borderless Error: {error}')
             pass
 
+    def update_rpc_status(self):
+        # Connects to the emulator's RPC server (protocol version 2 first, then 1).
+        # The version that works is kept for the whole session (see modules/citra.py).
+        if not is_connected():
+            # RPC port closed: the emulator (or the game) is not running
+            if self.rpc_ok is not None:
+                self.rpc_ok = None
+                self.redraw_console = True
+            return
+        if self.rpc_ok or time.time() < self.rpc_next_try:
+            return  # already connected, or waiting before the next attempt
+        self.rpc_next_try = time.time() + 5  # if it fails, try again in 5 seconds
+        ok = connect_rpc() is not None
+        if ok != self.rpc_ok:
+            self.rpc_ok = ok
+            self.redraw_console = True
+
+    def refresh_console(self):
+        clear_screen()
+        header()
+        if self.rpc_ok:
+            print(TextColor.green("connected to RPC server"))
+        elif self.rpc_ok is False:
+            print(TextColor.red("error not able to connect to RPC server"))
+
     def wait_init_game(self, labels, label_layouts, status_labels, status_layouts):
+        self.update_rpc_status()
+        if self.redraw_console:
+            self.redraw_console = False
+            self.refresh_console()
         if not self.is_open_window:
             if self.running:
-                clear_screen()
-                header()
+                self.refresh_console()
             if self.data_fetcher:
                 self.data_fetcher.terminate()
             self.running = False
@@ -343,10 +375,14 @@ class Overlay(QWidget):
             if time.time() > self.timeout_start + self.timeout:
                 sys.exit()
         else:
+            if not self.rpc_ok:
+                # game window found but the RPC server does not answer (yet):
+                # the red error stays on screen and the 20 minutes countdown does not run
+                self.counter = self.timeout
+                self.timeout_start = time.time()
+                return
             if not self.running:
-                clear_screen()
-                header()
-                check_connection()
+                self.refresh_console()
                 self.start_data_fetcher(labels, label_layouts, status_labels, status_layouts)
             self.running = True
             self.counter = self.timeout
