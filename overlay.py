@@ -29,6 +29,7 @@ from modules.utils import (
     max_status,
     logger_init,
     log_timer,
+    log_info,
     log_error,
     is_connected,
     enable_ansi_colors,
@@ -348,10 +349,12 @@ class Overlay(QWidget):
     def refresh_console(self):
         clear_screen()
         header()
-        if self.rpc_ok:
-            print(TextColor.green("connected to RPC server"))
-        elif self.rpc_ok is False:
-            print(TextColor.red("error not able to connect to RPC server"))
+        if self.debugger:
+           (
+                log_error("error not able to connect to RPC server") if self.rpc_ok is False
+                else log_info("connected to RPC server")
+            )
+                
 
     def wait_init_game(self, labels, label_layouts, status_labels, status_layouts):
         self.update_rpc_status()
